@@ -3,12 +3,12 @@
 
   --reflect-min: color-mix(
     in oklab,
-    color-mix(in oklab, var(--color-accent) 33%, var(--color-highlight)) 66%,
+    color-mix(in oklab, var(--color-accent) 50%, var(--color-highlight)) 66%,
     transparent
   );
   --reflect-max: color-mix(
     in oklab,
-    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 66%,
+    color-mix(in oklab, var(--color-accent) 10%, var(--color-highlight)) 66%,
     transparent
   );
 }
@@ -35,7 +35,7 @@
 .outerBg {
   background-color: color-mix(
     in oklab,
-    var(--color-pastel) 75%,
+    var(--color-pastel) 60%,
     var(--color-accent)
   );
 }
