@@ -1,6 +1,8 @@
 import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
 import Image from "next/image";
 
+export const dynamic = "force-dynamic";
+
 interface SmallCol {
   proportion: number;
 }
@@ -111,7 +113,7 @@ export default function MasonryLayout() {
         gridTemplateColumns: bigColTemplate,
         gap: "0.8rem",
       }}
-      className="w-full h-screen"
+      className="w-full h-full"
     >
       {masonry.bigCols.map((bigCol, bigIndex) => {
         const rowTemplate = bigCol.rows

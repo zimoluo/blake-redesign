@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${mainFont.variable} antialiased text-primary`}>
         <BackgroundGradient />
         <Navbar />
-        <div className="min-h-[90svh] mb-16 mt-4">{children}</div>
+        <div className="mb-12 mt-4">{children}</div>
         <Footer />
       </body>
     </html>
