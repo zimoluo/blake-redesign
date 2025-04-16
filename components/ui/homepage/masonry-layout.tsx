@@ -92,12 +92,18 @@ export function generateMasonry(): MasonryData {
 
 export default function MasonryLayout() {
   const masonry = generateMasonry();
-
-  const images = generateRandomPlaceholderImages(2000); // count exactly how many are there
+  const totalImages = masonry.bigCols.reduce(
+    (sum, big) =>
+      sum + big.rows.reduce((rowSum, row) => rowSum + row.smallCols.length, 0),
+    0
+  );
+  const images = generateRandomPlaceholderImages(totalImages);
+  let imagePtr = 0;
 
   const bigColTemplate = masonry.bigCols
     .map((col) => `${(col.proportion * 100).toFixed(2)}fr`)
     .join(" ");
+
   return (
     <div
       style={{
@@ -133,21 +139,23 @@ export default function MasonryLayout() {
                     gap: "0.8rem",
                   }}
                 >
-                  {row.smallCols.map((_, smallIndex) => (
-                    <div
-                      key={smallIndex}
-                      className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl overflow-hidden"
-                    >
-                      <Image
-                        src={
-                          images[bigIndex * 4 + rowIndex * 2 + smallIndex] // it's just an estimate. make this accurate
-                        }
-                        alt="Placeholder image"
-                        className="object-cover object-center min-w-full min-h-full absolute"
-                      />
-                      <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl" />
-                    </div>
-                  ))}
+                  {row.smallCols.map((_, smallIndex) => {
+                    const imageSrc = images[imagePtr++];
+
+                    return (
+                      <div
+                        key={smallIndex}
+                        className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl overflow-hidden"
+                      >
+                        <Image
+                          src={imageSrc}
+                          alt="Placeholder image"
+                          className="object-cover object-center w-full h-full absolute"
+                        />
+                        <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl" />
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}
