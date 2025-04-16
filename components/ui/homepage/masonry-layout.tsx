@@ -67,7 +67,7 @@ export function generateMasonry(): MasonryData {
 
     rows = rows.map((row) => {
       const numSmallCols = i === specialIndex ? 1 : Math.random() < 0.5 ? 1 : 2;
-      let smallCols: SmallCol[] = [];
+      const smallCols: SmallCol[] = [];
       if (numSmallCols === 1) {
         smallCols.push({ proportion: 1 });
       } else {
