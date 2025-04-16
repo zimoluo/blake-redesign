@@ -145,7 +145,7 @@ export default function MasonryLayout() {
                         alt="Placeholder image"
                         className="object-cover object-center min-w-full min-h-full absolute"
                       />
-                      <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl" />
+                      <div className="w-full h-full bg-transparent pointer-events-none select-none golden-frame rounded-2xl" />
                     </div>
                   ))}
                 </div>
