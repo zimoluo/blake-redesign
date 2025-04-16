@@ -55,10 +55,11 @@
     inset: 0;
     border-radius: inherit;
     padding: var(--reflect-size, 2px);
-    background: conic-gradient(
+    background: linear-gradient(
+        180deg,
         var(--reflect-min) 0%,
-        var(--reflect-max) 10%,
-        var(--reflect-max) 20%,
+        var(--reflect-max) 40%,
+        var(--reflect-max) 60%,
         var(--reflect-min) 100%
       ),
       linear-gradient(15deg, var(--reflect-min) 50%, var(--reflect-max));
