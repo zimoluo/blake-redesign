@@ -1,5 +1,7 @@
 import MasonryLayout from "@/components/ui/homepage/masonry-layout";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <main>
