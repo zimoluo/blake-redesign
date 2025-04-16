@@ -1,7 +1,7 @@
 import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
 import Image from "next/image";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface SmallCol {
   proportion: number;
