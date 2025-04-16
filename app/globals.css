@@ -4,8 +4,8 @@
   --font-size: 16px;
   --page-background: radial-gradient(
     circle farthest-corner at 50% 100%,
-    oklch(0.944 0 0) 0%,
-    oklch(0.996 0 0) 100%
+    oklch(0.914 0 0) 0%,
+    oklch(1 0.0054 95.1) 100%
   );
 }
 
@@ -26,18 +26,22 @@
   --color-pastel: oklch(0.98 0.0155 85.94);
   --color-accent: oklch(0.79 0.1173 85.94);
   --color-intense: oklch(0.58 0.1175 85.94);
+  --color-highlight: oklch(0.99 0.0189 93.66);
 }
 
 @layer components {
   .border-reflect {
     position: relative;
-    --reflect-color: color-mix(
+    --reflect-min: color-mix(
       in oklab,
-      var(--color-accent) 40%,
-      var(--color-pastel)
+      color-mix(in oklab, var(--color-accent) 75%, var(--color-highlight)) 60%,
+      transparent
     );
-    --reflect-min: color-mix(in oklab, var(--reflect-color) 15%, transparent);
-    --reflect-max: color-mix(in oklab, var(--reflect-color) 85%, transparent);
+    --reflect-max: color-mix(
+      in oklab,
+      color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 80%,
+      transparent
+    );
     --reflect-opacity: 1;
     --reflect-start: 1;
     --reflect-size: 1px;
@@ -53,14 +57,39 @@
     padding: var(--reflect-size, 2px);
     background: linear-gradient(
         180deg,
-        var(--reflect-min),
-        var(--reflect-max),
-        var(--reflect-min)
+        var(--reflect-min) 0%,
+        var(--reflect-max) 40%,
+        var(--reflect-max) 60%,
+        var(--reflect-min) 100%
       ),
       linear-gradient(15deg, var(--reflect-min) 50%, var(--reflect-max));
     mask: linear-gradient(rgba(0, 0, 0, var(--reflect-start)), #000) content-box,
       linear-gradient(rgba(0, 0, 0, var(--reflect-start)), #000);
     mask-composite: exclude;
     opacity: var(--reflect-opacity, 1);
+  }
+
+  .gold-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background: conic-gradient(
+      from 30deg,
+      rgba(255, 238, 200, 0.15) 0%,
+      rgba(255, 223, 160, 0.3) 18%,
+      rgba(255, 238, 200, 0.5) 37%,
+      rgba(255, 223, 160, 0.15) 58%,
+      rgba(255, 238, 200, 0.35) 78%,
+      rgba(255, 223, 160, 0.05) 100%
+    );
+
+    padding: 3px;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    border-radius: inherit;
+
+    filter: blur(4px);
   }
 }

@@ -1,3 +1,6 @@
+import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
+import Image from "next/image";
+
 interface SmallCol {
   proportion: number;
 }
@@ -47,7 +50,7 @@ export function generateMasonry(): MasonryData {
     let rows: Row[] = [];
 
     if (numRows === 2) {
-      const firstRowProp = randomBetween(0.35, 0.65);
+      const firstRowProp = randomBetween(0.3, 0.7);
       rows.push({ proportion: firstRowProp, smallCols: [] });
       rows.push({ proportion: 1 - firstRowProp, smallCols: [] });
     } else {
@@ -68,7 +71,7 @@ export function generateMasonry(): MasonryData {
       if (numSmallCols === 1) {
         smallCols.push({ proportion: 1 });
       } else {
-        const firstSmallCol = randomBetween(0.3, 0.7);
+        const firstSmallCol = randomBetween(0.25, 0.75);
         smallCols.push({ proportion: firstSmallCol });
         smallCols.push({ proportion: 1 - firstSmallCol });
       }
@@ -90,6 +93,8 @@ export function generateMasonry(): MasonryData {
 export default function MasonryLayout() {
   const masonry = generateMasonry();
 
+  const images = generateRandomPlaceholderImages(2000); // count exactly how many are there
+
   const bigColTemplate = masonry.bigCols
     .map((col) => `${(col.proportion * 100).toFixed(2)}fr`)
     .join(" ");
@@ -98,7 +103,7 @@ export default function MasonryLayout() {
       style={{
         display: "grid",
         gridTemplateColumns: bigColTemplate,
-        gap: "1rem",
+        gap: "0.8rem",
       }}
       className="w-full h-screen"
     >
@@ -112,7 +117,7 @@ export default function MasonryLayout() {
             style={{
               display: "grid",
               gridTemplateRows: rowTemplate,
-              gap: "1rem",
+              gap: "0.8rem",
             }}
           >
             {bigCol.rows.map((row, rowIndex) => {
@@ -125,20 +130,22 @@ export default function MasonryLayout() {
                   style={{
                     display: "grid",
                     gridTemplateColumns: smallColTemplate,
-                    gap: "1rem",
+                    gap: "0.8rem",
                   }}
                 >
                   {row.smallCols.map((_, smallIndex) => (
                     <div
                       key={smallIndex}
-                      style={{
-                        border: "1px solid #999",
-                        padding: "0.5rem",
-                        textAlign: "center",
-                      }}
+                      className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl overflow-hidden"
                     >
-                      BigCol {bigIndex + 1}, Row {rowIndex + 1}, SmallCol{" "}
-                      {smallIndex + 1}
+                      <Image
+                        src={
+                          images[bigIndex * 4 + rowIndex * 2 + smallIndex] // it's just an estimate. make this accurate
+                        }
+                        alt="Placeholder image"
+                        className="object-cover object-center min-w-full min-h-full absolute"
+                      />
+                      <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl" />
                     </div>
                   ))}
                 </div>
