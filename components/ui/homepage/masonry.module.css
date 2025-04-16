@@ -1,0 +1,14 @@
+.borderAdjust {
+  --reflect-angle: 135deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 50%, var(--color-highlight)) 75%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 8%, var(--color-highlight)) 75%,
+    transparent
+  );
+}

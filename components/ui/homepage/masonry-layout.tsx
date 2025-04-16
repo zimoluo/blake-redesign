@@ -1,5 +1,6 @@
 import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
 import Image from "next/image";
+import masonryStyle from "./masonry.module.css";
 
 interface SmallCol {
   proportion: number;
@@ -152,7 +153,9 @@ export default function MasonryLayout() {
                           alt="Placeholder image"
                           className="object-cover object-center w-full h-full absolute"
                         />
-                        <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl" />
+                        <div
+                          className={`w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl ${masonryStyle.borderAdjust}`}
+                        />
                       </div>
                     );
                   })}
