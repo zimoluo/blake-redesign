@@ -145,7 +145,7 @@ export default function MasonryLayout() {
                     return (
                       <div
                         key={smallIndex}
-                        className="bg-highlight/80 shadow-lg/15 rounded-3xl backdrop-blur-2xl overflow-hidden"
+                        className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl overflow-hidden"
                       >
                         <Image
                           src={imageSrc}

@@ -23,3 +23,18 @@
   padding-right: 0;
   padding-top: 0;
 }
+
+.news {
+  --reflect-angle: 75deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 20%, var(--color-highlight)) 75%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 80%,
+    transparent
+  );
+}
