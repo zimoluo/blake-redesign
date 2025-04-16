@@ -28,7 +28,7 @@ export default function Footer() {
 
           <div className="flex items-center justify-center h-4 gap-4 text-sm text-primary/75 text-center">
             <Link href="#" className="hover:underline underline-offset-2 w-24">
-              What's New
+              What{"\u2019"}s New
             </Link>
             <Link href="#" className="hover:underline underline-offset-2 w-24">
               About Blake
