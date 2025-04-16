@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
+import BackgroundGradient from "@/components/ui/background/background-gradient";
+import Navbar from "@/components/ui/navbar/navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const mainFont = Lato({
+  variable: "--font-main",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -24,10 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${mainFont.variable} antialiased text-primary`}>
+        <BackgroundGradient />
+        <Navbar />
+        <div className="min-h-[90svh]">{children}</div>
+        {/* Footer will be here */}
       </body>
     </html>
   );

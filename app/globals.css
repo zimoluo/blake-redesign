@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-size: 16px;
+  --page-background: radial-gradient(
+    circle farthest-corner at 50% 100%,
+    oklch(0.944 0 0) 0%,
+    oklch(0.996 0 0) 100%
+  );
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --page-background: radial-gradient(
+      circle farthest-corner at 50% 100%,
+      oklch(0.305 0 0) 0%,
+      oklch(0.235 0 0) 100%
+    );
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --font-main: var(--font-main);
+  --color-primary: var(--color-neutral-900);
+  --color-contrast: oklch(0.975 0 0);
+  --color-pastel: oklch(0.98 0.0155 85.94);
+  --color-accent: oklch(0.79 0.1173 85.94);
+  --color-intense: oklch(0.58 0.1175 85.94);
+}
+
+@layer components {
+  .border-reflect {
+    position: relative;
+    --reflect-color: color-mix(
+      in oklab,
+      var(--color-accent) 40%,
+      var(--color-pastel)
+    );
+    --reflect-min: color-mix(in oklab, var(--reflect-color) 15%, transparent);
+    --reflect-max: color-mix(in oklab, var(--reflect-color) 85%, transparent);
+    --reflect-opacity: 1;
+    --reflect-start: 1;
+    --reflect-size: 1px;
+  }
+
+  .border-reflect::before {
+    content: "";
+    pointer-events: none;
+    user-select: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--reflect-size, 2px);
+    background: linear-gradient(
+        180deg,
+        var(--reflect-min),
+        var(--reflect-max),
+        var(--reflect-min)
+      ),
+      linear-gradient(15deg, var(--reflect-min) 50%, var(--reflect-max));
+    mask: linear-gradient(rgba(0, 0, 0, var(--reflect-start)), #000) content-box,
+      linear-gradient(rgba(0, 0, 0, var(--reflect-start)), #000);
+    mask-composite: exclude;
+    opacity: var(--reflect-opacity, 1);
+  }
 }
