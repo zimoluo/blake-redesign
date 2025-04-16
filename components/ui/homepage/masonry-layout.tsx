@@ -145,14 +145,14 @@ export default function MasonryLayout() {
                     return (
                       <div
                         key={smallIndex}
-                        className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl overflow-hidden"
+                        className="bg-highlight/80 shadow-lg/15 rounded-3xl backdrop-blur-2xl overflow-hidden"
                       >
                         <Image
                           src={imageSrc}
                           alt="Placeholder image"
                           className="object-cover object-center w-full h-full absolute"
                         />
-                        <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl" />
+                        <div className="w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-3xl" />
                       </div>
                     );
                   })}

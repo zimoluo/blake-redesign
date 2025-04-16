@@ -26,6 +26,7 @@
   --color-pastel: oklch(0.98 0.0155 85.94);
   --color-accent: oklch(0.79 0.1173 85.94);
   --color-intense: oklch(0.58 0.1175 85.94);
+  --color-dark: oklch(0.43 0.087 85.94);
   --color-highlight: oklch(0.99 0.0189 93.66);
 }
 
@@ -45,6 +46,7 @@
     --reflect-opacity: 1;
     --reflect-start: 1;
     --reflect-size: 1px;
+    --reflect-angle: 180deg;
   }
 
   .border-reflect::before {
@@ -56,7 +58,7 @@
     border-radius: inherit;
     padding: var(--reflect-size, 2px);
     background: linear-gradient(
-        180deg,
+        var(--reflect-angle, 180deg),
         var(--reflect-min) 0%,
         var(--reflect-max) 40%,
         var(--reflect-max) 60%,

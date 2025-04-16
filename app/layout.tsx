@@ -3,6 +3,7 @@ import { Lato } from "next/font/google";
 import "./globals.css";
 import BackgroundGradient from "@/components/ui/background/background-gradient";
 import Navbar from "@/components/ui/navbar/navbar";
+import Footer from "@/components/ui/footer/footer";
 
 const mainFont = Lato({
   variable: "--font-main",
@@ -25,8 +26,8 @@ export default function RootLayout({
       <body className={`${mainFont.variable} antialiased text-primary`}>
         <BackgroundGradient />
         <Navbar />
-        <div className="min-h-[90svh]">{children}</div>
-        {/* Footer will be here */}
+        <div className="min-h-[90svh] mb-16 mt-4">{children}</div>
+        <Footer />
       </body>
     </html>
   );

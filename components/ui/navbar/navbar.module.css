@@ -2,3 +2,24 @@
   width: 10rem;
   @apply text-center;
 }
+
+.borderAdjust {
+  --reflect-angle: 75deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 30%, var(--color-highlight)) 33%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 33%,
+    transparent
+  );
+}
+
+.borderAdjust::before {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+}

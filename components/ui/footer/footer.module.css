@@ -1,0 +1,41 @@
+.borderAdjust {
+  --reflect-angle: 50deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 33%, var(--color-highlight)) 66%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 66%,
+    transparent
+  );
+}
+
+.borderAdjust::before {
+  padding-bottom: 0;
+}
+
+.inner {
+  --reflect-angle: 75deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-contrast) 50%, var(--color-highlight)) 33%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-contrast) 5%, var(--color-highlight)) 33%,
+    transparent
+  );
+}
+
+.outerBg {
+  background-color: color-mix(
+    in oklab,
+    var(--color-pastel) 75%,
+    var(--color-accent)
+  );
+}
