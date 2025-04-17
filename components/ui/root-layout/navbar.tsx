@@ -4,6 +4,7 @@ import navbarStyle from "./navbar.module.css";
 import Link from "next/link";
 import NavbarToggleButton from "./navbar-toggle-button";
 import NavbarSecondaryMenuWrapper from "./navbar-secondary-menu-wrapper";
+import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
 
 export default function Navbar() {
   return (
@@ -27,7 +28,7 @@ export default function Navbar() {
 
       <NavbarSecondaryMenuWrapper>
         <div className="h-full w-full bg-highlight/75 backdrop-blur-2xl text-dark shadow-xl/5">
-          put the navigation stuff here
+          <NavbarSubmenuCategorySelector />
         </div>
       </NavbarSecondaryMenuWrapper>
 

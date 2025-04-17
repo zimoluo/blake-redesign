@@ -18,12 +18,15 @@ export const NavbarControlContext = createContext<
       isNavbarMenuOpen: boolean;
       setIsNavbarMenuOpen: Dispatch<SetStateAction<boolean>>;
       toggleNavbarMenu: () => void;
+      selectedNavbarMenuIndex: number;
+      setSelectedNavbarMenuIndex: Dispatch<SetStateAction<number>>;
     }
   | undefined
 >(undefined);
 
 export function NavbarControlProvider({ children }: Props) {
   const [isNavbarMenuOpen, setIsNavbarMenuOpen] = useState(false);
+  const [selectedNavbarMenuIndex, setSelectedNavbarMenuIndex] = useState(0);
 
   const toggleNavbarMenu = () => {
     setIsNavbarMenuOpen((prev) => !prev);
@@ -35,6 +38,8 @@ export function NavbarControlProvider({ children }: Props) {
         isNavbarMenuOpen,
         setIsNavbarMenuOpen,
         toggleNavbarMenu,
+        selectedNavbarMenuIndex,
+        setSelectedNavbarMenuIndex,
       }}
     >
       {children}

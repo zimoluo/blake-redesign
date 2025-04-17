@@ -44,3 +44,18 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+.submenuBorderAdjust {
+  --reflect-angle: 75deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 30%, var(--color-highlight)) 33%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 33%,
+    transparent
+  );
+}
