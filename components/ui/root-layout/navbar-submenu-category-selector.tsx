@@ -34,7 +34,7 @@ export default function NavbarSubmenuCategorySelector() {
                 navbarStyle.submenuBorderAdjust,
                 navbarStyle.submenuTransition,
                 {
-                  "border-reflect bg-accent/15 shadow-lg/5": isActive,
+                  "border-reflect bg-accent/10 shadow-lg/5": isActive,
                   "bg-transparent": !isActive,
                 }
               )}
