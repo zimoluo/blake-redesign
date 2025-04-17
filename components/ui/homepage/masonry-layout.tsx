@@ -2,6 +2,9 @@ import { generateRandomPlaceholderImages } from "@/components/placeholder/placeh
 import Image from "next/image";
 import masonryStyle from "./masonry.module.css";
 
+// this is a placeholder implementation for demo purposes. the use of RSC rather than client-side javascript here is debated as it's one of the few cases that client-side scripting might be preferred.
+// the current implementation is a custom-made masonry grid layout that does not account for things like responsive design. the idea is good but the implementation may be revised.
+
 interface SmallCol {
   proportion: number;
 }
