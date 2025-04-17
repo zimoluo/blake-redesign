@@ -4,6 +4,7 @@ import "./globals.css";
 import BackgroundGradient from "@/components/ui/root-layout/background-gradient";
 import Navbar from "@/components/ui/root-layout/navbar";
 import Footer from "@/components/ui/root-layout/footer";
+import { NavbarControlProvider } from "@/components/context/NavbarControlContext";
 
 const mainFont = Lato({
   variable: "--font-main",
@@ -58,13 +59,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${mainFont.variable} antialiased text-primary`}>
-        <BackgroundGradient />
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <div className="mb-12 mt-4">{children}</div>
-          <div className="flex-grow pointer-events-none select-none invisible" />
-          <Footer />
-        </div>
+        <NavbarControlProvider>
+          <BackgroundGradient />
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <div className="mb-12 mt-4">{children}</div>
+            <div className="flex-grow pointer-events-none select-none invisible" />
+            <Footer />
+          </div>
+        </NavbarControlProvider>
       </body>
     </html>
   );
