@@ -39,6 +39,21 @@
   );
 }
 
+[data-theme="dark"] .news {
+  --reflect-angle: 75deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 20%, var(--color-highlight)) 25%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 30%,
+    transparent
+  );
+}
+
 .toggle {
   transition-property: translate, rotate, transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
