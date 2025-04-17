@@ -9,7 +9,7 @@ export default function NavbarToggleButton() {
 
   return (
     <button
-      className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out"
+      className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out cursor-pointer"
       onClick={toggleNavbarMenu}
     >
       <div
