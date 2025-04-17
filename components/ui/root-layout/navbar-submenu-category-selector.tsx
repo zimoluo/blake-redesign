@@ -30,7 +30,7 @@ export default function NavbarSubmenuCategorySelector() {
               type="button"
               onClick={() => setSelectedNavbarMenuIndex(idx)}
               className={clsx(
-                "text-center px-2.5 py-2.5 text-sm rounded-2xl flex items-center justify-center",
+                "text-center px-2.5 py-2.5 text-sm rounded-2xl flex items-center justify-center duration-300 ease-out",
                 navbarStyle.submenuBorderAdjust,
                 navbarStyle.submenuTransition,
                 {
