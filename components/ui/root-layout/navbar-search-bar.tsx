@@ -28,9 +28,10 @@ export default function NavbarSearchBar() {
         className="absolute right-0 top-1/2 -translate-y-1/2 h-6 w-6"
       >
         <MagnifyingGlassIcon
-          className={`h-6 w-6 transition-transform duration-300 ease-out ${
+          className={`h-6 w-6 transition-[transform,scale,color] duration-300 ease-out ${
             isSearchBarExpanded ? "scale-[0.8]" : "hover:scale-110"
           }`}
+          strokeClassName={isSearchBarExpanded ? "stroke-dark" : ""}
         />
       </button>
       <div

@@ -1,4 +1,7 @@
-export default function MenuToggleIcon({ className = "" }: AssetIcon) {
+export default function MenuToggleIcon({
+  className = "",
+  strokeClassName,
+}: AssetIcon) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -7,7 +10,7 @@ export default function MenuToggleIcon({ className = "" }: AssetIcon) {
       className={className}
     >
       <path
-        className={"stroke-primary"}
+        className={`${strokeClassName ? strokeClassName : "stroke-primary"}`}
         strokeLinecap="round"
         strokeWidth={64}
         fill="none"
