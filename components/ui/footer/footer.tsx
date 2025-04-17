@@ -32,14 +32,14 @@ export default function Footer() {
       <footer
         className={clsx(
           footerStyle.outerBg,
-          "rounded-[1.5rem_1.5rem_0_0] z-10 backdrop-blur-2xl border-reflect w-[min(85svw,75rem)]",
+          "md:rounded-[1.5rem_1.5rem_0_0] z-10 backdrop-blur-2xl border-reflect w-full md:w-[min(85svw,75rem)]",
           footerStyle.borderAdjust,
-          "p-2 pb-0 shadow-2xl/15"
+          "pt-2 px-0 md:px-2 pb-0 shadow-2xl/15"
         )}
       >
         <div
           className={clsx(
-            "border-reflect bg-contrast/75 w-full rounded-[1rem_1rem_0_0]",
+            "border-reflect bg-contrast/75 w-full md:rounded-[1rem_1rem_0_0]",
             footerStyle.inner,
             "shadow-lg/5 pt-8 pb-18 px-4 space-y-16"
           )}
