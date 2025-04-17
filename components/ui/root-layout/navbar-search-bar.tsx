@@ -22,6 +22,7 @@ export default function NavbarSearchBar() {
             ? "opacity-100"
             : "opacity-0 invisible pointer-events-none select-none"
         }`}
+        disabled={!isSearchBarExpanded}
       />
       <button
         onClick={() => setIsSearchBarExpanded((prev) => !prev)}
