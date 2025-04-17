@@ -23,7 +23,7 @@ const infoLinks = [
 ].map((label) => ({ href: "#", label }));
 
 const Separator = () => (
-  <div className="h-full w-0.25 bg-intense rounded-full" />
+  <div className="hidden md:block h-full w-0.25 bg-intense rounded-full" />
 );
 
 export default function Footer() {
@@ -41,10 +41,10 @@ export default function Footer() {
           className={clsx(
             "border-reflect bg-contrast/75 w-full md:rounded-[1rem_1rem_0_0]",
             footerStyle.inner,
-            "shadow-lg/5 pt-8 pb-18 px-4 space-y-12"
+            "shadow-lg/5 pt-6 md:pt-8 pb-18 px-4 space-y-12"
           )}
         >
-          <div className="flex items-center justify-center h-6 uppercase gap-4 text-dark text-lg">
+          <div className="flex flex-col md:flex-row items-center justify-center md:h-7 text-center px-8 md:px-0 uppercase gap-4 text-dark text-lg">
             <Separator />
             {topNavLinks.map(({ href, label }) => (
               <Fragment key={label}>
@@ -59,12 +59,12 @@ export default function Footer() {
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-4 text-sm text-primary/75 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 items-center justify-center gap-4 px-2 md:px-4 text-sm text-primary/75 text-center">
             {infoLinks.map(({ href, label }) => (
               <Link
                 key={label}
                 href={href}
-                className="hover:underline underline-offset-2 w-30"
+                className="hover:underline underline-offset-2"
               >
                 {label}
               </Link>
@@ -75,7 +75,7 @@ export default function Footer() {
             <hr className="w-full h-0.25 border-0 bg-intense rounded-full" />
           </div>
 
-          <div className="text-xl font-logo text-center uppercase tracking-widest relative transition-colors text-dark duration-300 ease-out leading-0">
+          <div className="text-lg md:text-xl whitespace-nowrap font-logo text-center uppercase tracking-widest relative transition-colors text-dark duration-300 ease-out leading-0">
             The William Blake Archive
           </div>
         </div>
