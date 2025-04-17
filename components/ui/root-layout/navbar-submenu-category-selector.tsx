@@ -33,8 +33,8 @@ export default function NavbarSubmenuCategorySelector() {
                   navbarStyle.submenuBorderAdjust
                 } ${
                 isActive
-                  ? "border-reflect bg-accent/15"
-                  : "border-transparent bg-transparent"
+                  ? "border-reflect bg-accent/15 shadow-lg/5"
+                  : "bg-transparent"
               } transition-colors duration-150
               `}
               aria-pressed={isActive}
