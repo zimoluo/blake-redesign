@@ -18,12 +18,12 @@ export default function MasonryImage({ src }: Props) {
       />
       <div className="absolute bottom-6 left-4 w-full space-y-2">
         <div
-          className={`w-[min(85%,10rem)] px-2 py-1.5 text-sm text-intense bg-highlight/65 backdrop-blur-md rounded-full border-reflect ${imageStyle.transition} opacity-0 group-hover:opacity-100 duration-300 ease-out translate-y-10 group-hover:translate-y-0 delay-[310ms] group-hover:delay-[50ms] ${imageStyle.positiveBorder}`}
+          className={`w-[min(85%,10rem)] px-2.5 py-1 text-sm text-intense bg-highlight/65 backdrop-blur-md rounded-full border-reflect ${imageStyle.transition} opacity-0 group-hover:opacity-100 duration-300 ease-out translate-y-10 group-hover:translate-y-0 delay-[310ms] group-hover:delay-[50ms] ${imageStyle.positiveBorder}`}
         >
           Description 1
         </div>
         <div
-          className={`w-[min(85%,10rem)] px-2 py-1.5 text-sm text-pastel bg-accent/65 backdrop-blur-md rounded-full border-reflect ${imageStyle.transition} opacity-0 group-hover:opacity-100 duration-300 ease-out translate-y-10 group-hover:translate-y-0 delay-[250ms] group-hover:delay-[110ms] ${imageStyle.negativeBorder}`}
+          className={`w-[min(85%,10rem)] px-2.5 py-1 text-sm text-pastel bg-accent/65 backdrop-blur-md rounded-full border-reflect ${imageStyle.transition} opacity-0 group-hover:opacity-100 duration-300 ease-out translate-y-10 group-hover:translate-y-0 delay-[250ms] group-hover:delay-[110ms] ${imageStyle.negativeBorder}`}
         >
           Description 2
         </div>
