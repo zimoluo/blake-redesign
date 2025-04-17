@@ -59,3 +59,7 @@
     transparent
   );
 }
+
+.submenuTransition {
+  transition-property: background-color, box-shadow;
+}

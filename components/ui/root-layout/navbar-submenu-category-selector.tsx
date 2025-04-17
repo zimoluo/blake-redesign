@@ -28,15 +28,13 @@ export default function NavbarSubmenuCategorySelector() {
               key={idx}
               type="button"
               onClick={() => setSelectedNavbarMenuIndex(idx)}
-              className={`
-                text-center px-2.5 py-2.5 text-sm rounded-2xl flex items-center justify-center ${
-                  navbarStyle.submenuBorderAdjust
-                } ${
+              className={`text-center px-2.5 py-2.5 text-sm rounded-2xl flex items-center justify-center ${
+                navbarStyle.submenuBorderAdjust
+              } ${
                 isActive
                   ? "border-reflect bg-accent/15 shadow-lg/5"
                   : "bg-transparent"
-              } transition-colors duration-150
-              `}
+              } ${navbarStyle.submenuTransition} duration-300 ease-out`}
               aria-pressed={isActive}
             >
               {label}
