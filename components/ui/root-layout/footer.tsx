@@ -75,7 +75,7 @@ export default function Footer() {
             <hr className="w-full h-0.25 border-0 bg-intense rounded-full" />
           </div>
 
-          <div className="text-xl text-center uppercase tracking-widest relative transition-colors text-dark duration-300 ease-out leading-0">
+          <div className="text-xl font-logo text-center uppercase tracking-widest relative transition-colors text-dark duration-300 ease-out leading-0">
             The William Blake Archive
           </div>
         </div>

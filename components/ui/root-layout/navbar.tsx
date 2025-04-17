@@ -18,7 +18,7 @@ export default function Navbar() {
             src={signatureSrc}
             alt="The William Blake Archive Signature"
           />
-          <div className="text-xl uppercase tracking-widest relative transition-colors group-hover:text-intense duration-300 ease-out">
+          <div className="text-xl font-logo uppercase tracking-widest relative transition-colors group-hover:text-intense duration-300 ease-out">
             The William Blake Archive
           </div>
         </Link>

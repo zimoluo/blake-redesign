@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
+import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import BackgroundGradient from "@/components/ui/root-layout/background-gradient";
 import Navbar from "@/components/ui/root-layout/navbar";
 import Footer from "@/components/ui/root-layout/footer";
 import { NavbarControlProvider } from "@/components/context/NavbarControlContext";
 
-const mainFont = Lato({
+const mainFont = Inter({
   variable: "--font-main",
+  subsets: ["latin"],
+});
+
+const logoFont = Lato({
+  variable: "--font-logo",
   subsets: ["latin"],
   weight: "400",
 });
@@ -58,7 +63,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${mainFont.variable} antialiased text-primary`}>
+      <body
+        className={`${mainFont.variable} ${logoFont.variable} antialiased text-primary font-main`}
+      >
         <NavbarControlProvider>
           <BackgroundGradient />
           <div className="flex flex-col min-h-screen">

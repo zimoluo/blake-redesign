@@ -21,6 +21,7 @@
 
 @theme inline {
   --font-main: var(--font-main);
+  --font-logo: var(--font-logo);
   --color-primary: var(--color-neutral-900);
   --color-contrast: oklch(0.975 0 0);
   --color-pastel: oklch(0.98 0.0155 85.94);
