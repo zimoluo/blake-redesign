@@ -5,6 +5,7 @@ import BackgroundGradient from "@/components/ui/root-layout/background-gradient"
 import Navbar from "@/components/ui/root-layout/navbar";
 import Footer from "@/components/ui/root-layout/footer";
 import { NavbarControlProvider } from "@/components/context/NavbarControlContext";
+import { ThemeProvider } from "next-themes";
 
 const mainFont = Inter({
   variable: "--font-main",
@@ -62,19 +63,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${mainFont.variable} ${logoFont.variable} antialiased text-primary font-main`}
       >
-        <NavbarControlProvider>
-          <BackgroundGradient />
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <div className="mb-12 mt-4">{children}</div>
-            <div className="flex-grow pointer-events-none select-none invisible" />
-            <Footer />
-          </div>
-        </NavbarControlProvider>
+        <ThemeProvider>
+          <NavbarControlProvider>
+            <BackgroundGradient />
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <div className="mb-12 mt-4">{children}</div>
+              <div className="flex-grow pointer-events-none select-none invisible" />
+              <Footer />
+            </div>
+          </NavbarControlProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

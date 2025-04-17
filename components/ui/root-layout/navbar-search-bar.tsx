@@ -17,7 +17,7 @@ export default function NavbarSearchBar() {
       <input
         type="text"
         placeholder="Search"
-        className={`h-9 absolute -right-1.5 top-1/2 -translate-y-1/2 w-full rounded-full text-sm py-1.5 pl-2.5 pr-8 bg-highlight/90 text-dark placeholder:text-dark/50 outline-none transition-[opacity,visibility] duration-300 ease-out ${
+        className={`h-9 absolute -right-1.5 top-1/2 -translate-y-1/2 w-full rounded-full text-sm py-1.5 pl-2.5 pr-8 bg-pastel/90 text-dark placeholder:text-dark/50 outline-none transition-[opacity,visibility] duration-300 ease-out ${
           isSearchBarExpanded
             ? "opacity-100"
             : "opacity-0 invisible pointer-events-none select-none"

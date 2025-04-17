@@ -23,7 +23,7 @@ export default function MasonryImage({ src }: Props) {
           Description 1
         </div>
         <div
-          className={`w-[min(85%,10rem)] px-2.5 py-1 text-sm text-pastel bg-accent/65 shadow-md backdrop-blur-md rounded-full border-reflect ${imageStyle.transition} opacity-0 group-hover:opacity-100 duration-300 ease-out translate-x-4 scale-[0.93] group-hover:scale-100 translate-y-5 group-hover:translate-y-0 delay-[250ms] group-hover:delay-[110ms] ${imageStyle.negativeBorder}`}
+          className={`w-[min(85%,10rem)] px-2.5 py-1 text-sm text-highlight bg-accent/65 shadow-md backdrop-blur-md rounded-full border-reflect ${imageStyle.transition} opacity-0 group-hover:opacity-100 duration-300 ease-out translate-x-4 scale-[0.93] group-hover:scale-100 translate-y-5 group-hover:translate-y-0 delay-[250ms] group-hover:delay-[110ms] ${imageStyle.negativeBorder}`}
         >
           Description 2
         </div>
