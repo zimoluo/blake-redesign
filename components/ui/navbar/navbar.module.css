@@ -1,6 +1,6 @@
 .navigation > li {
   width: 10rem;
-  @apply text-center;
+  text-align: center;
 }
 
 .borderAdjust {
