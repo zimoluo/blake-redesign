@@ -9,7 +9,7 @@ export default function Navbar() {
       <div
         className={`flex items-center h-[4.25rem] bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust}`}
       >
-        <Link className="px-8 h-full grid items-center relative group" href="/">
+        <Link className="px-6 h-full grid items-center relative group" href="/">
           <Image
             className="h-14 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-50 mix-blend-multiply"
             src={signatureSrc}
