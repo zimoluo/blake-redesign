@@ -7,6 +7,7 @@ import NavbarSecondaryMenuWrapper from "./navbar-secondary-menu-wrapper";
 import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
 import NavbarSearchBar from "./navbar-search-bar";
 import InfoIcon from "../asset/info-icon";
+import LightDarkModeToggle from "./light-dark-mode-toggle";
 
 export default function Navbar() {
   return (
@@ -16,7 +17,7 @@ export default function Navbar() {
       >
         <Link className="px-6 h-full grid items-center relative group" href="/">
           <Image
-            className="h-12 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60 mix-blend-multiply"
+            className="h-12 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60 dark:opacity-30 mix-blend-multiply dark:mix-blend-lighten"
             src={signatureSrc}
             alt="The William Blake Archive Signature"
           />
@@ -26,6 +27,7 @@ export default function Navbar() {
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
         <div className="flex items-center gap-6 mr-6">
+          <LightDarkModeToggle />
           <InfoIcon className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out" />
           <NavbarSearchBar />
           <NavbarToggleButton />

@@ -1,6 +1,6 @@
 export default function MenuToggleIcon({
   className = "",
-  strokeClassName,
+  strokeClassName = "",
 }: AssetIcon) {
   return (
     <svg
