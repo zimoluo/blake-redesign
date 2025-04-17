@@ -14,7 +14,7 @@
 }
 
 .transition {
-  transition-property: opacity, transform, translate;
+  transition-property: opacity, transform, translate, scale;
 }
 
 .negativeBorder {

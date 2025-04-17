@@ -26,7 +26,7 @@ export default function Navbar() {
       </div>
 
       <NavbarSecondaryMenuWrapper>
-        <div className="h-full w-full bg-highlight/75 backdrop-blur-2xl shadow-xl/5">
+        <div className="h-full w-full bg-highlight/75 backdrop-blur-2xl text-dark shadow-xl/5">
           put the navigation stuff here
         </div>
       </NavbarSecondaryMenuWrapper>
