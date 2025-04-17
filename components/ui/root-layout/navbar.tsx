@@ -5,12 +5,13 @@ import Link from "next/link";
 import NavbarToggleButton from "./navbar-toggle-button";
 import NavbarSecondaryMenuWrapper from "./navbar-secondary-menu-wrapper";
 import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
+import MagnifyingGlassIcon from "../asset/magnifying-glass-icon";
 
 export default function Navbar() {
   return (
     <nav className="sticky top-0 z-10">
       <div
-        className={`flex items-center h-15 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect pr-4 ${navbarStyle.borderAdjust}`}
+        className={`flex items-center h-15 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust}`}
       >
         <Link className="px-6 h-full grid items-center relative group" href="/">
           <Image
@@ -23,7 +24,10 @@ export default function Navbar() {
           </div>
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
-        <NavbarToggleButton />
+        <div className="flex items-center gap-6 mr-6">
+          <MagnifyingGlassIcon className="h-6 w-6" />
+          <NavbarToggleButton />
+        </div>
       </div>
 
       <NavbarSecondaryMenuWrapper>
