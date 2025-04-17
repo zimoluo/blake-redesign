@@ -59,7 +59,7 @@ export default function Footer() {
             ))}
           </div>
 
-          <div className="flex items-center justify-center h-4 gap-5 text-sm text-primary/75 text-center">
+          <div className="flex items-center justify-center h-4 gap-4 text-sm text-primary/75 text-center">
             {infoLinks.map(({ href, label }) => (
               <Link
                 key={label}
