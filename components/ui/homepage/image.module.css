@@ -1,0 +1,48 @@
+.borderAdjust {
+  --reflect-angle: 135deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 50%, var(--color-highlight)) 85%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 8%, var(--color-highlight)) 85%,
+    transparent
+  );
+}
+
+.transition {
+  transition-property: all;
+}
+
+.negativeBorder {
+  --reflect-angle: 150deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 36%, var(--color-highlight)) 40%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 8%, var(--color-highlight)) 50%,
+    transparent
+  );
+}
+
+.positiveBorder {
+  --reflect-angle: 150deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-contrast) 30%, var(--color-highlight)) 40%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-contrast) 5%, var(--color-highlight)) 50%,
+    transparent
+  );
+}

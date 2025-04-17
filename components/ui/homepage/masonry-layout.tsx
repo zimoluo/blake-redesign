@@ -1,6 +1,6 @@
 import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
 import Image from "next/image";
-import masonryStyle from "./masonry.module.css";
+import MasonryImage from "./masonry-image";
 
 // this is a placeholder implementation for demo purposes. the use of RSC rather than client-side javascript here is debated as it's one of the few cases that client-side scripting might be preferred.
 // the current implementation is a custom-made masonry grid layout that does not account for things like responsive design. the idea is good but the implementation may be revised.
@@ -145,22 +145,7 @@ export default function MasonryLayout() {
                 >
                   {row.smallCols.map((_, smallIndex) => {
                     const imageSrc = images[imagePtr++];
-
-                    return (
-                      <div
-                        key={smallIndex}
-                        className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl overflow-hidden"
-                      >
-                        <Image
-                          src={imageSrc}
-                          alt="Placeholder image"
-                          className="object-cover object-center w-full h-full absolute"
-                        />
-                        <div
-                          className={`w-full h-full bg-transparent pointer-events-none select-none border-reflect rounded-2xl ${masonryStyle.borderAdjust}`}
-                        />
-                      </div>
-                    );
+                    return <MasonryImage key={smallIndex} src={imageSrc} />;
                   })}
                 </div>
               );
