@@ -41,7 +41,7 @@ export default function Footer() {
           className={clsx(
             "border-reflect bg-contrast/75 w-full md:rounded-[1rem_1rem_0_0]",
             footerStyle.inner,
-            "shadow-lg/5 pt-8 pb-18 px-4 space-y-16"
+            "shadow-lg/5 pt-8 pb-18 px-4 space-y-12"
           )}
         >
           <div className="flex items-center justify-center h-6 uppercase gap-4 text-dark text-lg">
@@ -59,7 +59,7 @@ export default function Footer() {
             ))}
           </div>
 
-          <div className="flex items-center justify-center h-4 gap-4 text-sm text-primary/75 text-center">
+          <div className="flex items-center justify-center gap-4 text-sm text-primary/75 text-center">
             {infoLinks.map(({ href, label }) => (
               <Link
                 key={label}
@@ -71,7 +71,7 @@ export default function Footer() {
             ))}
           </div>
 
-          <div className="px-16 mt-18 mb-18">
+          <div className="px-16 py-4">
             <hr className="w-full h-0.25 border-0 bg-intense rounded-full" />
           </div>
 
