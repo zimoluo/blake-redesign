@@ -34,7 +34,7 @@ export default function NavbarSearchBar() {
         />
       </button>
       <div
-        className={`h-9 absolute -right-1.5 top-1/2 -translate-y-1/2 w-full rounded-full border-reflect ${
+        className={`h-9 absolute -right-1.5 top-1/2 -translate-y-1/2 w-full rounded-full border-reflect shadow-lg/5 ${
           isSearchBarExpanded ? "opacity-100" : "opacity-0 invisible"
         } pointer-events-none transition-[opacity,visibility] duration-300 ease-out select-none ${
           navbarStyle.searchBarBorderAdjust
