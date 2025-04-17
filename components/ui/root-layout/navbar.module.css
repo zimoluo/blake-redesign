@@ -46,7 +46,7 @@
 }
 
 .submenuBorderAdjust {
-  --reflect-angle: 75deg;
+  --reflect-angle: 150deg;
 
   --reflect-min: color-mix(
     in oklab,
