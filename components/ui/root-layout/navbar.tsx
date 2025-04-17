@@ -11,7 +11,7 @@ export default function Navbar() {
       >
         <Link className="px-6 h-full grid items-center relative group" href="/">
           <Image
-            className="h-12 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-50 mix-blend-multiply"
+            className="h-12 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60 mix-blend-multiply"
             src={signatureSrc}
             alt="The William Blake Archive Signature"
           />
