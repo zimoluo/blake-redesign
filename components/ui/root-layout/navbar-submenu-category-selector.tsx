@@ -1,6 +1,7 @@
 "use client";
 
 import { useNavbarControl } from "@/components/context/NavbarControlContext";
+import clsx from "clsx";
 import navbarStyle from "./navbar.module.css";
 
 const categories = [
@@ -28,13 +29,15 @@ export default function NavbarSubmenuCategorySelector() {
               key={idx}
               type="button"
               onClick={() => setSelectedNavbarMenuIndex(idx)}
-              className={`text-center px-2.5 py-2.5 text-sm rounded-2xl flex items-center justify-center ${
-                navbarStyle.submenuBorderAdjust
-              } ${
-                isActive
-                  ? "border-reflect bg-accent/15 shadow-lg/5"
-                  : "bg-transparent"
-              } ${navbarStyle.submenuTransition} duration-300 ease-out`}
+              className={clsx(
+                "text-center px-2.5 py-2.5 text-sm rounded-2xl flex items-center justify-center",
+                navbarStyle.submenuBorderAdjust,
+                navbarStyle.submenuTransition,
+                {
+                  "border-reflect bg-accent/15 shadow-lg/5": isActive,
+                  "bg-transparent": !isActive,
+                }
+              )}
               aria-pressed={isActive}
             >
               {label}
