@@ -64,7 +64,7 @@ export default function Footer() {
               <Link
                 key={label}
                 href={href}
-                className="hover:underline underline-offset-2 w-24"
+                className="hover:underline underline-offset-2 w-28"
               >
                 {label}
               </Link>
