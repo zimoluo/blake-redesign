@@ -7,11 +7,11 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-10">
       <div
-        className={`flex items-center h-[4.25rem] bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust}`}
+        className={`flex items-center h-15 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust}`}
       >
         <Link className="px-6 h-full grid items-center relative group" href="/">
           <Image
-            className="h-14 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-50 mix-blend-multiply"
+            className="h-12 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-50 mix-blend-multiply"
             src={signatureSrc}
             alt="The William Blake Archive Signature"
           />
@@ -20,14 +20,7 @@ export default function Navbar() {
           </div>
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
-        <ul
-          className={`flex gap-2 text-sm ${navbarStyle.navigation} h-full flex items-center`}
-        >
-          <li>Illuminated Books</li>
-          <li>Commercial Book Illustrations</li>
-          <li>Separate Prints and Prints in Series</li>
-          <li>Paintings and Drawings</li>
-        </ul>
+        <div>menu button yay</div>
       </div>
 
       <div
