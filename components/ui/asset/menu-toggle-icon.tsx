@@ -14,7 +14,7 @@ export default function MenuToggleIcon({
         strokeLinecap="round"
         strokeWidth={64}
         fill="none"
-        d="M904 512H120"
+        d="M894 512H130"
       />
     </svg>
   );
