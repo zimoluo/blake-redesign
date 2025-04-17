@@ -12,7 +12,7 @@ export default function NavbarSecondaryMenuWrapper({ children }: Props) {
   return (
     <div
       style={{
-        height: isNavbarMenuOpen ? "16rem" : "0",
+        height: isNavbarMenuOpen ? "20rem" : "0",
         transitionProperty: "height, visibility",
       }}
       className={`${

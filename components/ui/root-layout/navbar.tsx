@@ -29,6 +29,9 @@ export default function Navbar() {
       <NavbarSecondaryMenuWrapper>
         <div className="h-full w-full bg-highlight/75 backdrop-blur-2xl text-dark shadow-xl/5">
           <NavbarSubmenuCategorySelector />
+          <div className="w-full px-8 py-2">
+            <hr className="w-full h-0.25 border-0 bg-accent/50" />
+          </div>
         </div>
       </NavbarSecondaryMenuWrapper>
 
