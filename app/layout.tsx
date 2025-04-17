@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
-import BackgroundGradient from "@/components/ui/background/background-gradient";
-import Navbar from "@/components/ui/navbar/navbar";
-import Footer from "@/components/ui/footer/footer";
+import BackgroundGradient from "@/components/ui/root-layout/background-gradient";
+import Navbar from "@/components/ui/root-layout/navbar";
+import Footer from "@/components/ui/root-layout/footer";
 
 const mainFont = Lato({
   variable: "--font-main",
