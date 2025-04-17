@@ -63,3 +63,18 @@
 .submenuTransition {
   transition-property: background-color, box-shadow;
 }
+
+.searchBarBorderAdjust {
+  --reflect-angle: 150deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 40%, var(--color-highlight)) 50%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 60%,
+    transparent
+  );
+}

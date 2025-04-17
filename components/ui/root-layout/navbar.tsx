@@ -5,7 +5,7 @@ import Link from "next/link";
 import NavbarToggleButton from "./navbar-toggle-button";
 import NavbarSecondaryMenuWrapper from "./navbar-secondary-menu-wrapper";
 import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
-import MagnifyingGlassIcon from "../asset/magnifying-glass-icon";
+import NavbarSearchBar from "./navbar-search-bar";
 
 export default function Navbar() {
   return (
@@ -25,7 +25,7 @@ export default function Navbar() {
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
         <div className="flex items-center gap-6 mr-6">
-          <MagnifyingGlassIcon className="h-6 w-6" />
+          <NavbarSearchBar />
           <NavbarToggleButton />
         </div>
       </div>
