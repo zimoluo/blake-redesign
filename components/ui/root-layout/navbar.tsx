@@ -6,6 +6,7 @@ import NavbarToggleButton from "./navbar-toggle-button";
 import NavbarSecondaryMenuWrapper from "./navbar-secondary-menu-wrapper";
 import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
 import NavbarSearchBar from "./navbar-search-bar";
+import InfoIcon from "../asset/info-icon";
 
 export default function Navbar() {
   return (
@@ -25,6 +26,7 @@ export default function Navbar() {
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
         <div className="flex items-center gap-6 mr-6">
+          <InfoIcon className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out" />
           <NavbarSearchBar />
           <NavbarToggleButton />
         </div>
