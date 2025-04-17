@@ -1,5 +1,4 @@
 import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
-import Image from "next/image";
 import MasonryImage from "./masonry-image";
 
 // this is a placeholder implementation for demo purposes. the use of RSC rather than client-side javascript here is debated as it's one of the few cases that client-side scripting might be preferred.
