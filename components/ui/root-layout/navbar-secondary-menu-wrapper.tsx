@@ -16,7 +16,7 @@ export default function NavbarSecondaryMenuWrapper({ children }: Props) {
         transitionProperty: "height, visibility",
       }}
       className={`${
-        isNavbarMenuOpen ? "" : "invisible"
+        isNavbarMenuOpen ? "" : "invisible pointer-events-none select-none"
       } duration-300 ease-in-out overflow-hidden`}
     >
       {children}
