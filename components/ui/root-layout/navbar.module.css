@@ -93,3 +93,13 @@
     transparent
   );
 }
+
+.submenuHeight {
+  height: var(--navbar-submenu-height, 80svh);
+}
+
+@media (width >= 48rem) {
+  .submenuHeight {
+    height: var(--navbar-submenu-height, 20rem);
+  }
+}

@@ -21,7 +21,7 @@ export default function NavbarSubmenuCategorySelector() {
 
   return (
     <nav aria-label="Category selector">
-      <div className="w-full grid grid-cols-8 gap-4 py-4 px-4">
+      <div className="w-full grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4 py-4 px-4">
         {categories.map((label, idx) => {
           const isActive = idx === selectedNavbarMenuIndex;
           return (

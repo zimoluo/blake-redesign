@@ -1,6 +1,7 @@
 "use client";
 
 import { useNavbarControl } from "@/components/context/NavbarControlContext";
+import navbarStyle from './navbar.module.css'
 
 interface Props {
   children?: React.ReactNode;
@@ -11,13 +12,15 @@ export default function NavbarSecondaryMenuWrapper({ children }: Props) {
 
   return (
     <div
-      style={{
-        height: isNavbarMenuOpen ? "20rem" : "0",
-        transitionProperty: "height, visibility",
-      }}
+      style={
+        {
+          "--navbar-submenu-height": !isNavbarMenuOpen ? "0" : undefined,
+          transitionProperty: "height, visibility",
+        } as Record<string, string>
+      }
       className={`${
         isNavbarMenuOpen ? "" : "invisible pointer-events-none select-none"
-      } duration-300 ease-in-out overflow-hidden`}
+      } ${navbarStyle.submenuHeight} duration-300 ease-in-out overflow-hidden`}
     >
       {children}
     </div>

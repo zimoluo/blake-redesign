@@ -5,7 +5,15 @@ import SunIcon from "../asset/sun-icon";
 import MoonIcon from "../asset/moon-icon";
 import { useEffect, useState } from "react";
 
-export default function LightDarkModeToggle() {
+interface Props {
+  className?: string;
+  strokeClassName?: string;
+}
+
+export default function LightDarkModeToggle({
+  className = "",
+  strokeClassName = "",
+}: Props) {
   const { theme, systemTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -32,12 +40,18 @@ export default function LightDarkModeToggle() {
     <button
       onClick={handleToggle}
       aria-label="Toggle light/dark mode"
-      className="transition-transform duration-300 ease-out hover:scale-110"
+      className={`w-6 h-6 ${className}`}
     >
       {isLight ? (
-        <SunIcon className="w-6 h-6" />
+        <SunIcon
+          className="w-6 h-6 transition-transform duration-300 ease-out hover:scale-110"
+          strokeClassName={strokeClassName}
+        />
       ) : (
-        <MoonIcon className="w-6 h-6" />
+        <MoonIcon
+          className="w-6 h-6 transition-transform duration-300 ease-out hover:scale-110"
+          strokeClassName={strokeClassName}
+        />
       )}
     </button>
   );
