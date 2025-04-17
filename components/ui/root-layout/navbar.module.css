@@ -50,12 +50,12 @@
 
   --reflect-min: color-mix(
     in oklab,
-    color-mix(in oklab, var(--color-accent) 52%, var(--color-highlight)) 55%,
+    color-mix(in oklab, var(--color-accent) 45%, var(--color-highlight)) 50%,
     transparent
   );
   --reflect-max: color-mix(
     in oklab,
-    color-mix(in oklab, var(--color-accent) 5%, var(--color-highlight)) 55%,
+    color-mix(in oklab, var(--color-accent) 13%, var(--color-highlight)) 65%,
     transparent
   );
 }
