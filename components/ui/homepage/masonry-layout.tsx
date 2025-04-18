@@ -1,5 +1,6 @@
 import { generateRandomPlaceholderImages } from "@/components/placeholder/placeholder-images";
 import MasonryImage from "./masonry-image";
+import masonryStyle from "./masonry.module.css";
 
 // this is a placeholder implementation for demo purposes. the use of RSC rather than client-side javascript here is debated as it's one of the few cases that client-side scripting might be preferred.
 // the current implementation is a custom-made masonry grid layout that does not account for things like responsive design. the idea is good but the implementation may be revised.
@@ -109,12 +110,13 @@ export default function MasonryLayout() {
 
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: bigColTemplate,
-        gap: "0.8rem",
-      }}
-      className="w-full h-full"
+      style={
+        {
+          display: "grid",
+          "--masonry-big-col-template": bigColTemplate,
+        } as Record<string, string>
+      }
+      className={`w-full h-full ${masonryStyle.bigCol}`}
     >
       {masonry.bigCols.map((bigCol, bigIndex) => {
         const rowTemplate = bigCol.rows
@@ -124,7 +126,6 @@ export default function MasonryLayout() {
           <div
             key={bigIndex}
             style={{
-              display: "grid",
               gridTemplateRows: rowTemplate,
               gap: "0.8rem",
             }}

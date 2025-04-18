@@ -1,0 +1,28 @@
+.bigCol {
+  grid-template-columns: 1fr repeat(4, 0);
+  gap: 0;
+}
+
+.bigCol > * {
+  display: grid;
+}
+
+.bigCol > *:not(:first-child) {
+  display: none;
+}
+
+@media (width >= 48rem) {
+  .bigCol {
+    grid-template-columns: var(--masonry-big-col-template);
+    gap: 0.8rem;
+  }
+
+  .bigCol > *:not(:first-child) {
+    display: grid;
+  }
+}
+
+/* So the logic here is that for small screens only the first column is displayed.
+* This is achieved by a combination of css variables manipulation and some hacky rules.
+* Leaving this documentation here so that I or any reader won't get confused.
+*/

@@ -7,7 +7,7 @@ interface Props {
 
 export default function MasonryImage({ src }: Props) {
   return (
-    <div className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl group relative">
+    <div className="bg-highlight/80 shadow-lg/15 rounded-2xl backdrop-blur-2xl group relative overflow-hidden">
       <Image
         src={src}
         alt="Placeholder image"
