@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default function Home() {
   return (
     <main>
-      <div className="w-full h-[80svh] px-[0.8rem]">
+      <div className="w-full h-[max(80svh,28rem)] px-[0.8rem]">
         {/* Since MasonryLayout is not async, this suspense will never be triggered. It's here to provide an alternative visual of how the loading screen would look like */}
         <Suspense fallback={<MasonryLoading />}>
           <MasonryLayout />
