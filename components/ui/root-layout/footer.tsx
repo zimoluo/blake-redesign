@@ -28,7 +28,7 @@ const Separator = () => (
 
 export default function Footer() {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center relative z-0">
       <footer
         className={clsx(
           footerStyle.outerBg,
