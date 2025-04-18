@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import SunIcon from "../asset/sun-icon";
 import MoonIcon from "../asset/moon-icon";
 import { useEffect, useState } from "react";
+import toggleStyle from "./light-dark-mode-toggle.module.css";
 
 interface Props {
   className?: string;
@@ -44,12 +45,12 @@ export default function LightDarkModeToggle({
     >
       {isLight ? (
         <SunIcon
-          className="w-6 h-6 transition-transform duration-300 ease-out hover:scale-110"
+          className={`w-6 h-6 transition-transform duration-300 ease-out hover:scale-110 ${toggleStyle.startup}`}
           strokeClassName={strokeClassName}
         />
       ) : (
         <MoonIcon
-          className="w-6 h-6 transition-transform duration-300 ease-out hover:scale-110"
+          className={`w-6 h-6 transition-transform duration-300 ease-out hover:scale-110 ${toggleStyle.startup}`}
           strokeClassName={strokeClassName}
         />
       )}
