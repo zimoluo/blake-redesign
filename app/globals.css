@@ -14,9 +14,9 @@
   --color-intense: oklch(0.58 0.1175 85.94);
   --color-dark: oklch(0.43 0.087 85.94);
   --color-pastel: oklch(0.99 0.0189 93.66);
-  --color-highlight: oklch(
-    0.99 0.0189 93.66
-  ); /* pastel and highlight have no difference in light mode. However highlight will remain bright in dark mode, while pastel gets to be very dark. */
+  --color-highlight: oklch(0.99 0.0189 93.66);
+  /* pastel and highlight have no difference in light mode. However highlight will remain bright in dark mode, while pastel gets to be very dark. */
+  /* that is, highlight is intended to be used for glowing elements or text under negative backgrounds. in these cases they should remain bright no matter what. */
 }
 
 :where([data-theme="dark"], [data-theme="dark"] *) {
