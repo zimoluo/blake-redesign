@@ -95,7 +95,7 @@
 }
 
 .submenuHeight {
-  height: var(--navbar-submenu-height, 80svh);
+  height: var(--navbar-submenu-height, calc(100dvh - 3.75rem));
 }
 
 @media (width >= 48rem) {
