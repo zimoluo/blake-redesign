@@ -1,6 +1,6 @@
 "use client";
 
-import { useNavbarControl } from "@/components/context/NavbarControlContext";
+import { useNavbarControl } from "@/components/context/navbar-control-context";
 import clsx from "clsx";
 import navbarStyle from "./navbar.module.css";
 

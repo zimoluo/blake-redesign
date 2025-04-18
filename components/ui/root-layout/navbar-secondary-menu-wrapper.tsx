@@ -1,7 +1,7 @@
 "use client";
 
-import { useNavbarControl } from "@/components/context/NavbarControlContext";
-import navbarStyle from './navbar.module.css'
+import { useNavbarControl } from "@/components/context/navbar-control-context";
+import navbarStyle from "./navbar.module.css";
 
 interface Props {
   children?: React.ReactNode;

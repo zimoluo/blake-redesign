@@ -4,7 +4,7 @@ import "./globals.css";
 import BackgroundGradient from "@/components/ui/root-layout/background-gradient";
 import Navbar from "@/components/ui/root-layout/navbar";
 import Footer from "@/components/ui/root-layout/footer";
-import { NavbarControlProvider } from "@/components/context/NavbarControlContext";
+import { NavbarControlProvider } from "@/components/context/navbar-control-context";
 import { ThemeProvider } from "next-themes";
 
 const mainFont = Inter({
