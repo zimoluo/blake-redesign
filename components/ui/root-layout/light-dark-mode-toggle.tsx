@@ -34,12 +34,12 @@ export default function LightDarkModeToggle({
     >
       <SunIcon
         aria-hidden
-        className={`icon-sun absolute inset-0 transition-transform duration-300 group-hover:scale-110 ${toggleStyle.sun}`}
+        className={`icon-sun absolute inset-0 transition-transform duration-300 ease-out origin-center group-hover:scale-110 ${toggleStyle.sun}`}
         strokeClassName={strokeClassName}
       />
       <MoonIcon
         aria-hidden
-        className={`icon-moon absolute inset-0 transition-transform duration-300 group-hover:scale-110 ${toggleStyle.moon}`}
+        className={`icon-moon absolute inset-0 transition-transform duration-300 ease-out origin-center group-hover:scale-110 ${toggleStyle.moon}`}
         strokeClassName={strokeClassName}
       />
     </button>

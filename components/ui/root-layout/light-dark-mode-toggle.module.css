@@ -2,8 +2,6 @@
 .moon {
   position: absolute;
   inset: 0;
-  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
-  transform-origin: center;
 }
 
 .sun {
