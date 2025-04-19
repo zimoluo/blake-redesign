@@ -1,8 +1,8 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import SunIcon from "../asset/sun-icon";
-import MoonIcon from "../asset/moon-icon";
+import SunIcon from "@/components/asset/sun-icon";
+import MoonIcon from "@/components/asset/moon-icon";
 import toggleStyle from "./light-dark-mode-toggle.module.css";
 
 interface Props {

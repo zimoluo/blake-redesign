@@ -2,7 +2,7 @@
 
 import { useNavbarControl } from "@/components/context/navbar-control-context";
 import navbarStyle from "./navbar.module.css";
-import MenuToggleIcon from "../asset/menu-toggle-icon";
+import MenuToggleIcon from "@/components/asset/menu-toggle-icon";
 
 export default function NavbarToggleButton() {
   const { isNavbarMenuOpen, toggleNavbarMenu } = useNavbarControl();

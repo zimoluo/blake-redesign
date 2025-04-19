@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import navbarStyle from "./navbar.module.css";
-import MagnifyingGlassIcon from "../asset/magnifying-glass-icon";
+import MagnifyingGlassIcon from "@/components/asset/magnifying-glass-icon";
 
 interface Props {
   className?: string;

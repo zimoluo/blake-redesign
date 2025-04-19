@@ -6,7 +6,7 @@ import NavbarToggleButton from "./navbar-toggle-button";
 import NavbarSecondaryMenuWrapper from "./navbar-secondary-menu-wrapper";
 import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
 import NavbarSearchBar from "./navbar-search-bar";
-import InfoIcon from "../asset/info-icon";
+import InfoIcon from "@/components/asset/info-icon";
 import LightDarkModeToggle from "./light-dark-mode-toggle";
 
 export default function Navbar() {
