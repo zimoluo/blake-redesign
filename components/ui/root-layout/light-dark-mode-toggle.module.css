@@ -1,14 +1,27 @@
-@keyframes spinScaleFadeIn {
-  from {
-    transform: rotate(-180deg) scale(0);
-    opacity: 0.75;
-  }
-  to {
-    transform: rotate(0deg) scale(1);
-    opacity: 1;
-  }
+.sun,
+.moon {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  transform-origin: center;
 }
 
-.startup {
-  animation: spinScaleFadeIn 0.2s ease-out forwards;
+.sun {
+  transform: rotate(-180deg) scale(0);
+  opacity: 0;
+}
+
+.moon {
+  transform: rotate(180deg) scale(0);
+  opacity: 0;
+}
+
+[data-theme="light"] .sun {
+  transform: rotate(0) scale(1);
+  opacity: 1;
+}
+
+[data-theme="dark"] .moon {
+  transform: rotate(0) scale(1);
+  opacity: 1;
 }
