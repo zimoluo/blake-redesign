@@ -50,6 +50,11 @@ export default function Navbar() {
           <NavbarSubmenuCategorySelector />
           <div className="w-full px-8 py-2">
             <hr className="w-full h-0.25 border-0 bg-accent/50" />
+            <div className="w-full flex justify-center items-center">
+              <p className="font-bold opacity-50 text-accent text-lg p-4">
+                Specific navigation goes here...
+              </p>
+            </div>
           </div>
         </div>
       </NavbarSecondaryMenuWrapper>
