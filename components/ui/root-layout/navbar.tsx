@@ -31,7 +31,9 @@ export default function Navbar() {
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
         <div className="flex items-center gap-4 md:gap-6 mr-4 md:mr-6">
           <LightDarkModeToggle className="hidden md:block" />
-          <InfoIcon className="h-6 w-6 hidden md:block hover:scale-110 transition-transform duration-300 ease-out" />
+          <button>
+            <InfoIcon className="h-6 w-6 hidden md:block hover:scale-110 transition-transform duration-300 ease-out" />
+          </button>
           <NavbarSearchBar className="hidden md:block" />
           <NavbarToggleButton />
         </div>
@@ -42,10 +44,12 @@ export default function Navbar() {
           <div className="md:hidden flex items-center justify-center pt-7 pb-5 gap-6">
             <LightDarkModeToggle strokeClassName="stroke-dark" />
             <NavbarSearchBar alwaysExpanded={true} />
-            <InfoIcon
-              className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out"
-              strokeClassName="stroke-dark"
-            />
+            <button>
+              <InfoIcon
+                className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out"
+                strokeClassName="stroke-dark"
+              />
+            </button>
           </div>
           <NavbarSubmenuCategorySelector />
           <div className="w-full px-8 py-2">
