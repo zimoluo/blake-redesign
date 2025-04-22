@@ -35,7 +35,6 @@ const CustomImageEditor: React.FC = () => {
   });
   const [origState, setOrigState] = useState<Partial<ImageItem>>({});
 
-  // Load images
   useEffect(() => {
     images.forEach((item) => {
       if (!item.img) {
