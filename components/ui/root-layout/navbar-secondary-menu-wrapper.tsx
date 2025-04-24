@@ -15,11 +15,13 @@ export default function NavbarSecondaryMenuWrapper({ children }: Props) {
       style={
         {
           "--navbar-submenu-height": !isNavbarMenuOpen ? "0" : undefined,
-          transitionProperty: "height, visibility",
+          transitionProperty: "height, visibility, box-shadow",
         } as Record<string, string>
       }
       className={`${
-        isNavbarMenuOpen ? "" : "invisible pointer-events-none select-none"
+        isNavbarMenuOpen
+          ? "shadow-xl/5"
+          : "invisible pointer-events-none select-none"
       } ${navbarStyle.submenuHeight} duration-300 ease-in-out overflow-hidden`}
     >
       {children}

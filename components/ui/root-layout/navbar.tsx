@@ -41,7 +41,7 @@ export default function Navbar() {
       </div>
 
       <NavbarSecondaryMenuWrapper>
-        <div className="h-full w-full bg-pastel/85 backdrop-blur-2xl text-dark shadow-xl/5">
+        <div className="h-full w-full bg-pastel/85 backdrop-blur-2xl text-dark">
           <div className="md:hidden flex items-center justify-center pt-7 pb-5 gap-6">
             <LightDarkModeToggle strokeClassName="stroke-dark" />
             <NavbarSearchBar alwaysExpanded={true} />
