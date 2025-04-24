@@ -77,7 +77,10 @@ export default function RootLayout({
                 <div className="mb-12 mt-19">
                   <main>{children}</main>
                 </div>
-                <div className="flex-grow pointer-events-none select-none invisible" />
+                <div
+                  className="flex-grow pointer-events-none select-none invisible"
+                  aria-hidden
+                />
                 <Footer />
               </div>
             </NavbarControlProvider>

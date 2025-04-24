@@ -50,10 +50,14 @@ export const SettingsProvider = ({
 }: {
   children?: React.ReactNode;
 }) => {
-  const [settings, setSettings] = useState<SettingsState>(() => {
-    const raw = localStorage.getItem(localStorageKey) || "";
-    return parseStoredSettings(raw);
-  });
+  const [settings, setSettings] = useState<SettingsState>(defaultSettings);
+
+  useEffect(() => {
+    const raw = localStorage.getItem(localStorageKey);
+    const loadedSettings = parseStoredSettings(raw || "") || {};
+
+    updateSettings(loadedSettings);
+  }, []);
 
   useEffect(() => {
     const toStore = JSON.stringify(purgeInvalidEntries(settings));
