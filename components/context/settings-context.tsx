@@ -10,7 +10,7 @@ import {
 } from "react";
 import { defaultSettings } from "@/lib/constants";
 
-const localStorageKey = "website-settings";
+const localStorageKey = "website-settings-blake";
 
 const parseStoredSettings = (rawSettingsString: string): SettingsState => {
   if (!rawSettingsString) {
