@@ -53,18 +53,6 @@ export const SettingsProvider = ({
 }) => {
   const [settings, setSettings] = useState<SettingsState>(defaultSettings);
 
-  useEffect(() => {
-    const raw = localStorage.getItem(localStorageKey);
-    const loadedSettings = parseStoredSettings(raw || "") || {};
-
-    updateSettings(loadedSettings);
-  }, []);
-
-  useEffect(() => {
-    const toStore = JSON.stringify(purgeInvalidEntries(settings));
-    localStorage.setItem(localStorageKey, toStore);
-  }, [settings]);
-
   const updateSettings = useCallback(
     (patch: Partial<SettingsState>) =>
       setSettings((prev) => ({ ...prev, ...patch })),
@@ -83,8 +71,20 @@ export const SettingsProvider = ({
 
   const contextValue = useMemo(
     () => ({ settings, updateSettings, toggleSettings }),
-    [settings]
+    [settings, updateSettings, toggleSettings]
   );
+
+  useEffect(() => {
+    const raw = localStorage.getItem(localStorageKey);
+    const loadedSettings = parseStoredSettings(raw || "") || {};
+
+    updateSettings(loadedSettings);
+  }, [updateSettings]);
+
+  useEffect(() => {
+    const toStore = JSON.stringify(purgeInvalidEntries(settings));
+    localStorage.setItem(localStorageKey, toStore);
+  }, [settings]);
 
   return <SettingsContext value={contextValue}>{children}</SettingsContext>;
 };
