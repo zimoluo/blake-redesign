@@ -32,7 +32,7 @@ const purgeInvalidEntries = (
   return Object.keys(rawSettings)
     .filter((key): key is keyof SettingsState => key in defaultSettings)
     .reduce((obj, key) => {
-      obj[key] = rawSettings[key] as any;
+      obj[key] = rawSettings[key] as SettingsState[keyof SettingsState];
       return obj;
     }, {} as Partial<SettingsState>);
 };
