@@ -39,6 +39,18 @@
   );
 }
 
+.news::before {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (width >= 48rem) {
+  .news::before {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+}
+
 [data-theme="dark"] .news {
   --reflect-angle: 75deg;
 

@@ -76,7 +76,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    padding: var(--reflect-size, 2px);
+    padding: var(--reflect-size, 1px);
     background: linear-gradient(
         var(--reflect-angle, 180deg),
         var(--reflect-min) 0%,
