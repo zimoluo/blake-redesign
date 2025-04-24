@@ -1,0 +1,55 @@
+.bigBox {
+  height: max(32rem, calc(100svh - 4.75rem - 1.25rem));
+  width: 100%;
+}
+
+.bgContainer {
+  background-color: color-mix(
+    in oklab,
+    var(--color-pastel) 72%,
+    var(--color-accent)
+  );
+}
+
+.bg {
+  background-color: color-mix(
+    in oklab,
+    var(--color-contrast) 30%,
+    var(--color-pastel)
+  );
+}
+
+.borderAdjust {
+  --reflect-angle: 75deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-contrast) 50%, var(--color-highlight)) 33%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-contrast) 5%, var(--color-highlight)) 33%,
+    transparent
+  );
+}
+
+.borderContainer {
+  --reflect-angle: 50deg;
+
+  --reflect-min: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 50%, var(--color-highlight)) 66%,
+    transparent
+  );
+  --reflect-max: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--color-accent) 10%, var(--color-highlight)) 66%,
+    transparent
+  );
+}
+
+.buttonContainer > button {
+  width: 2rem;
+  height: 2rem;
+}
