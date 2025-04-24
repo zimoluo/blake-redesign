@@ -14,14 +14,14 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 z-10 w-full">
       <div
-        className={`flex items-center h-15 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust} shrink-0`}
+        className={`flex items-center h-13 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust} shrink-0`}
       >
         <Link
           className="px-4 md:px-6 h-full grid items-center relative group"
           href="/"
         >
           <Image
-            className="h-9 md:h-12 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60 dark:opacity-30 mix-blend-multiply dark:mix-blend-lighten shrink-0"
+            className="h-9 md:h-11 w-auto absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60 dark:opacity-30 mix-blend-multiply dark:mix-blend-lighten shrink-0"
             src={signatureSrc}
             alt="The William Blake Archive Signature"
           />
@@ -66,7 +66,7 @@ export default function Navbar() {
 
       <NewsBarWrapper>
         <div
-          className={`h-9 bg-accent/70 backdrop-blur-2xl shadow-xl/5 md:rounded-b-2xl w-full border-reflect ${navbarStyle.news} flex items-center justify-center`}
+          className={`h-8 bg-accent/70 backdrop-blur-2xl shadow-xl/5 md:rounded-b-2xl w-full border-reflect ${navbarStyle.news} flex items-center justify-center`}
         >
           <div className="text-center text-highlight text-sm font-semibold">
             Latest Publication (02/28/25): Ghost of Abel and Homer

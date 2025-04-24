@@ -4,7 +4,7 @@ import SidebarWrapper from "@/components/ui/lightbox/sidebar-wrapper";
 
 export default function LightboxLayout() {
   return (
-    <div className={`${containerStyle.bigBox} px-6 py-4`}>
+    <div className={`${containerStyle.bigBox} px-6 py-3`}>
       <div
         className={`grid ${containerStyle.mobileGrid} md:flex h-full w-full p-2 border-reflect ${containerStyle.borderContainer} ${containerStyle.bgContainer} shadow-xl/5 rounded-3xl text-dark`}
       >
