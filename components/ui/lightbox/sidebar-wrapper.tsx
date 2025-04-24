@@ -13,17 +13,15 @@ export default function SidebarWrapper({ children }: Props) {
   return (
     <div
       style={{
-        width: lightboxIsSidebarOpen ? "12rem" : "0",
-        marginRight: lightboxIsSidebarOpen ? "0.5rem" : "0rem",
-        transform: lightboxIsSidebarOpen
-          ? "translateX(0)"
-          : "translateX(0.5rem)",
         transition:
-          "width 0.15s ease-out, margin-right 0.15s ease-out, transform 0.15s ease-out, visibility 0.15s ease-out",
-        visibility: lightboxIsSidebarOpen ? "visible" : "hidden",
+          "width 0.15s ease-out, margin-right 0.15s ease-out, transform 0.15s ease-out, translate 0.15s ease-out, visibility 0.15s ease-out",
       }}
       className={`overflow-hidden ${
         lightboxIsSidebarOpen ? "" : "pointer-events-none select-none"
+      } w-full ${
+        lightboxIsSidebarOpen
+          ? "md:w-48 md:mr-2 md:translate-x-0"
+          : "md:w-0 md:mr-0 md:translate-x-2 md:invisible"
       }`}
     >
       {children}

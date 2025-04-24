@@ -3,6 +3,22 @@
   width: 100%;
 }
 
+.mobileGrid {
+  grid-template-columns: 1fr 3rem;
+  grid-template-rows: auto 10rem;
+  gap: 0.5rem;
+}
+
+.mobileGrid > :first-child {
+  grid-column: span 2;
+}
+
+@media (width >= 48rem) {
+  .mobileGrid {
+    gap: 0;
+  }
+}
+
 .bgContainer {
   background-color: color-mix(
     in oklab,
