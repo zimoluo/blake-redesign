@@ -14,12 +14,12 @@
   opacity: 0;
 }
 
-[data-theme="light"] .sun {
+[data-theme="light"] .moon {
   transform: rotate(0) scale(1);
   opacity: 1;
 }
 
-[data-theme="dark"] .moon {
+[data-theme="dark"] .sun {
   transform: rotate(0) scale(1);
   opacity: 1;
 }
