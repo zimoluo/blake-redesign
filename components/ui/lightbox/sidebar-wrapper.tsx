@@ -22,7 +22,7 @@ export default function SidebarWrapper({ children }: Props) {
         lightboxIsSidebarOpen
           ? "md:w-48 md:mr-2 md:translate-x-0"
           : "md:w-0 md:mr-0 md:translate-x-2 md:invisible"
-      }`}
+      } rounded-[0.65rem_0.65rem_0.65rem_1rem] md:rounded-[0.65rem]`}
     >
       {children}
     </div>

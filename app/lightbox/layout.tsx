@@ -15,9 +15,9 @@ export default function LightboxLayout() {
         </div>
         <SidebarWrapper>
           <div
-            className={`rounded-[0.65rem_0.65rem_0.65rem_1rem] md:rounded-[0.65rem] ${containerStyle.bg} ${containerStyle.borderAdjust} w-full h-full border-reflect`}
+            className={`rounded-[0.65rem_0.65rem_0.65rem_1rem] md:rounded-[0.65rem] ${containerStyle.bg} ${containerStyle.borderAdjust} w-48 h-full border-reflect`}
           >
-            awa
+            this will hold the layers
           </div>
         </SidebarWrapper>
         <div
