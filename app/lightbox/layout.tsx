@@ -2,11 +2,7 @@ import SidebarToggle from "@/components/ui/lightbox/toolbar/sidebar-toggle";
 import containerStyle from "./container.module.css";
 import SidebarWrapper from "@/components/ui/lightbox/sidebar-wrapper";
 
-interface Props {
-  children?: React.ReactNode;
-}
-
-export default function LightboxLayout({ children }: Props) {
+export default function LightboxLayout() {
   return (
     <div className={`${containerStyle.bigBox} px-6 py-4`}>
       <div
