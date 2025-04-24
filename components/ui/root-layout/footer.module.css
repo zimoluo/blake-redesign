@@ -32,6 +32,10 @@
   );
 }
 
+.inner::before {
+  padding-bottom: 0;
+}
+
 .outerBg {
   background-color: color-mix(
     in oklab,
