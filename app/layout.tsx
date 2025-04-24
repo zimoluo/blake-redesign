@@ -72,7 +72,9 @@ export default function RootLayout({
             <BackgroundGradient />
             <div className="flex flex-col min-h-screen">
               <Navbar />
-              <div className="mb-12 mt-4">{children}</div>
+              <div className="mb-12 mt-19">
+                <main>{children}</main>
+              </div>
               <div className="flex-grow pointer-events-none select-none invisible" />
               <Footer />
             </div>

@@ -8,10 +8,11 @@ import NavbarSubmenuCategorySelector from "./navbar-submenu-category-selector";
 import NavbarSearchBar from "./navbar-search-bar";
 import InfoIcon from "@/components/asset/info-icon";
 import LightDarkModeToggle from "./light-dark-mode-toggle";
+import NewsBarWrapper from "./news-bar-wrapper";
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-10">
+    <nav className="fixed top-0 z-10">
       <div
         className={`flex items-center h-15 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust} shrink-0`}
       >
@@ -63,13 +64,15 @@ export default function Navbar() {
         </div>
       </NavbarSecondaryMenuWrapper>
 
-      <div
-        className={`h-9 bg-accent/70 backdrop-blur-2xl shadow-xl/5 md:rounded-b-2xl w-full border-reflect ${navbarStyle.news} flex items-center justify-center`}
-      >
-        <div className="text-center text-highlight text-sm font-semibold">
-          Latest Publication (02/28/25): Ghost of Abel and Homer
+      <NewsBarWrapper>
+        <div
+          className={`h-9 bg-accent/70 backdrop-blur-2xl shadow-xl/5 md:rounded-b-2xl w-full border-reflect ${navbarStyle.news} flex items-center justify-center`}
+        >
+          <div className="text-center text-highlight text-sm font-semibold">
+            Latest Publication (02/28/25): Ghost of Abel and Homer
+          </div>
         </div>
-      </div>
+      </NewsBarWrapper>
     </nav>
   );
 }
