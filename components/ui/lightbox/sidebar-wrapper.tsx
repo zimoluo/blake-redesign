@@ -15,7 +15,7 @@ export default function SidebarWrapper({ children }: Props) {
       style={{
         width: lightboxIsSidebarOpen ? "12rem" : "0",
         marginRight: lightboxIsSidebarOpen ? "0.5rem" : "0rem",
-        transition: "width 0.2s ease-out, margin-right 0.2s ease-out",
+        transition: "width 0.15s ease-out, margin-right 0.15s ease-out",
       }}
       className="overflow-hidden"
     >
