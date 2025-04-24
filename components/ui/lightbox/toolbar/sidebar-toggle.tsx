@@ -7,7 +7,10 @@ export default function SidebarToggle() {
   const { toggleSettings } = useSettings();
 
   return (
-    <button onClick={() => toggleSettings("lightboxIsSidebarOpen")}>
+    <button
+      onClick={() => toggleSettings("lightboxIsSidebarOpen")}
+      className="hidden md:block"
+    >
       <SidebarIcon
         className="w-full h-full transition-transform duration-300 ease-out hover:scale-110"
         strokeClassName="stroke-dark"
