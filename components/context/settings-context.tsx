@@ -41,6 +41,7 @@ const SettingsContext = createContext<
   | {
       settings: SettingsState;
       updateSettings: (newSettings: Partial<SettingsState>) => void;
+      toggleSettings: (key: keyof SettingsState) => void;
     }
   | undefined
 >(undefined);
@@ -70,8 +71,18 @@ export const SettingsProvider = ({
     []
   );
 
+  // intended for boolean entries only
+  const toggleSettings = useCallback(
+    (key: keyof SettingsState) =>
+      setSettings((prev) => ({
+        ...prev,
+        [key]: !prev[key],
+      })),
+    []
+  );
+
   const contextValue = useMemo(
-    () => ({ settings, updateSettings }),
+    () => ({ settings, updateSettings, toggleSettings }),
     [settings]
   );
 
