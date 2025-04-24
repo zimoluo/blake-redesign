@@ -6,6 +6,7 @@ import Navbar from "@/components/ui/root-layout/navbar";
 import Footer from "@/components/ui/root-layout/footer";
 import { NavbarControlProvider } from "@/components/context/navbar-control-context";
 import { ThemeProvider } from "next-themes";
+import { SettingsProvider } from "@/components/context/settings-context";
 
 const mainFont = Inter({
   variable: "--font-main",
@@ -68,17 +69,19 @@ export default function RootLayout({
         className={`${mainFont.variable} ${logoFont.variable} antialiased text-primary font-main`}
       >
         <ThemeProvider>
-          <NavbarControlProvider>
-            <BackgroundGradient />
-            <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <div className="mb-12 mt-19">
-                <main>{children}</main>
+          <SettingsProvider>
+            <NavbarControlProvider>
+              <BackgroundGradient />
+              <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <div className="mb-12 mt-19">
+                  <main>{children}</main>
+                </div>
+                <div className="flex-grow pointer-events-none select-none invisible" />
+                <Footer />
               </div>
-              <div className="flex-grow pointer-events-none select-none invisible" />
-              <Footer />
-            </div>
-          </NavbarControlProvider>
+            </NavbarControlProvider>
+          </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>
