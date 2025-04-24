@@ -7,6 +7,7 @@ import {
   useState,
   Dispatch,
   use,
+  useMemo,
 } from "react";
 
 type Props = {
@@ -32,18 +33,19 @@ export function NavbarControlProvider({ children }: Props) {
     setIsNavbarMenuOpen((prev) => !prev);
   };
 
+  const contextValue = useMemo(
+    () => ({
+      isNavbarMenuOpen,
+      setIsNavbarMenuOpen,
+      toggleNavbarMenu,
+      selectedNavbarMenuIndex,
+      setSelectedNavbarMenuIndex,
+    }),
+    [isNavbarMenuOpen, selectedNavbarMenuIndex]
+  );
+
   return (
-    <NavbarControlContext
-      value={{
-        isNavbarMenuOpen,
-        setIsNavbarMenuOpen,
-        toggleNavbarMenu,
-        selectedNavbarMenuIndex,
-        setSelectedNavbarMenuIndex,
-      }}
-    >
-      {children}
-    </NavbarControlContext>
+    <NavbarControlContext value={contextValue}>{children}</NavbarControlContext>
   );
 }
 

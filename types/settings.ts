@@ -1,0 +1,3 @@
+interface SettingsState {
+  lightboxIsSidebarOpen: boolean;
+}
