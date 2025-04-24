@@ -12,7 +12,7 @@ import NewsBarWrapper from "./news-bar-wrapper";
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 z-10">
+    <nav className="fixed top-0 z-10 w-full">
       <div
         className={`flex items-center h-15 bg-contrast/80 backdrop-blur-2xl shadow-xl/5 border-reflect ${navbarStyle.borderAdjust} shrink-0`}
       >
