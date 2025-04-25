@@ -75,9 +75,10 @@ export default function LightboxCanvas() {
     (pos: { x: number; y: number }) => {
       const canvas = canvasRef.current;
       if (!canvas) return { x: 0, y: 0 };
+      const rect = canvas.getBoundingClientRect();
       const { cameraCenterX, cameraCenterY, cameraZoom } = lightbox;
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
       return {
         x: (pos.x - cameraCenterX) * cameraZoom + cx,
         y: (pos.y - cameraCenterY) * cameraZoom + cy,
@@ -90,9 +91,10 @@ export default function LightboxCanvas() {
     (sx: number, sy: number) => {
       const canvas = canvasRef.current;
       if (!canvas) return { x: 0, y: 0 };
+      const rect = canvas.getBoundingClientRect();
       const { cameraCenterX, cameraCenterY, cameraZoom } = lightbox;
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
       return {
         x: (sx - cx) / cameraZoom + cameraCenterX,
         y: (sy - cy) / cameraZoom + cameraCenterY,
@@ -281,9 +283,10 @@ export default function LightboxCanvas() {
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const dpr = window.devicePixelRatio || 1;
-    const sx = e.clientX * dpr;
-    const sy = e.clientY * dpr;
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+
     canvas.setPointerCapture(e.pointerId);
 
     const handlePos = findHandleAt(sx, sy) as
@@ -326,10 +329,12 @@ export default function LightboxCanvas() {
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!canvasRef.current || (!isPanning && !editingHandle)) return;
-    const dpr = window.devicePixelRatio || 1;
-    const sx = e.clientX * dpr;
-    const sy = e.clientY * dpr;
+    const canvas = canvasRef.current;
+    if (!canvas || (!isPanning && !editingHandle)) return;
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+
     if (!dragStart) return;
 
     const dx = sx - dragStart.x;
