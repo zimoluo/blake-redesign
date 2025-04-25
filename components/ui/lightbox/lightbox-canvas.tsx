@@ -304,6 +304,7 @@ export default function LightboxCanvas() {
   const drawDotGrid = (
     ctx: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lightbox: any
   ) => {
     const gridSize = 20; // Size of grid cells in world space
@@ -333,6 +334,7 @@ export default function LightboxCanvas() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const drawImage = (ctx: CanvasRenderingContext2D, image: any) => {
     if (!image) return;
 
@@ -382,6 +384,7 @@ export default function LightboxCanvas() {
 
   const drawHandles = (
     ctx: CanvasRenderingContext2D,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     image: any,
     mode: string
   ) => {
@@ -464,6 +467,7 @@ export default function LightboxCanvas() {
   const getHandleAtPosition = (
     x: number,
     y: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     image: any,
     mode: string
   ): HandleType | null => {
@@ -572,6 +576,7 @@ export default function LightboxCanvas() {
     return Math.sqrt(dx * dx + dy * dy) <= threshold;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isPointInsideImage = (x: number, y: number, image: any) => {
     // Transform point to image's local space
     const dx = x - image.x;
