@@ -298,8 +298,7 @@ export default function LightboxCanvas() {
   const drawDotGrid = (
     ctx: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    lightbox: any
+    lightbox: LightboxData
   ) => {
     const gridSize = 20; // Size of grid cells in world space
 
