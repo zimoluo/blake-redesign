@@ -1,5 +1,5 @@
 .bigBox {
-  height: max(32rem, calc(100svh - 4rem - 1.25rem));
+  height: max(32rem, calc(100svh - 3.25rem));
   width: 100%;
 }
 

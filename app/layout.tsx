@@ -74,7 +74,7 @@ export default function RootLayout({
               <BackgroundGradient />
               <div className="flex flex-col min-h-screen">
                 <Navbar />
-                <div className="mb-12 mt-17">
+                <div className="mb-12 mt-13">
                   <main>{children}</main>
                 </div>
                 <div

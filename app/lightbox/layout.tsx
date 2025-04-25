@@ -7,12 +7,12 @@ import LightboxCanvas from "@/components/ui/lightbox/lightbox-canvas";
 export default function LightboxLayout() {
   return (
     <LightboxProvider>
-      <div className={`${containerStyle.bigBox} px-6 py-3`}>
+      <div className={`${containerStyle.bigBox} px-1 py-1 md:px-6 md:py-5`}>
         <div
           className={`grid ${containerStyle.mobileGrid} md:flex h-full w-full p-3 border-reflect ${containerStyle.borderContainer} ${containerStyle.bgContainer} shadow-xl/5 rounded-3xl text-dark`}
         >
           <div
-            className={`rounded-[1rem_1rem_0.65rem_0.65rem] md:rounded-[1rem_0.65rem_0.65rem_1rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-3 flex-grow border-reflect overflow-hidden`}
+            className={`rounded-[1rem_1rem_0.65rem_0.65rem] md:rounded-[1rem_0.65rem_0.65rem_1rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-3 flex-grow border-reflect overflow-hidden p-px`}
           >
             <LightboxCanvas />
           </div>
