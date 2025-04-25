@@ -78,12 +78,12 @@ export const LightboxProvider = ({
       updateSettings({ savedLightbox: newLightbox });
       return prev;
     });
-  }, [lightbox, updateSettings]);
+  }, [updateSettings]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Load the lightbox from settings on mount. This is intended to be a one-time load.
     setLightbox(settings.savedLightbox);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contextValue = useMemo(
