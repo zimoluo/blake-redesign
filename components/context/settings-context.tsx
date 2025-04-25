@@ -9,11 +9,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import { defaultSettings, localStorageKey } from "@/lib/constants";
+import { defaultSettings } from "@/lib/constants";
 
-export const parseStoredSettings = (
-  rawSettingsString: string
-): SettingsState => {
+const localStorageKey = "blake-website-settings";
+
+const parseStoredSettings = (rawSettingsString: string): SettingsState => {
   if (!rawSettingsString) {
     return defaultSettings;
   }
@@ -44,6 +44,7 @@ const SettingsContext = createContext<
       settings: SettingsState;
       updateSettings: (newSettings: Partial<SettingsState>) => void;
       toggleSettings: (key: keyof SettingsState) => void;
+      mounted: boolean;
     }
   | undefined
 >(undefined);
@@ -54,6 +55,7 @@ export const SettingsProvider = ({
   children?: React.ReactNode;
 }) => {
   const [settings, setSettings] = useState<SettingsState>(defaultSettings);
+  const [mounted, setMounted] = useState(false);
 
   const updateSettings = useCallback(
     (patch: Partial<SettingsState>) =>
@@ -72,16 +74,18 @@ export const SettingsProvider = ({
   );
 
   const contextValue = useMemo(
-    () => ({ settings, updateSettings, toggleSettings }),
-    [settings, updateSettings, toggleSettings]
+    () => ({ settings, updateSettings, toggleSettings, mounted }),
+    [settings, updateSettings, toggleSettings, mounted]
   );
 
   useLayoutEffect(() => {
     const raw = localStorage.getItem(localStorageKey);
     const loadedSettings = parseStoredSettings(raw || "") || {};
 
+    setMounted(true);
     updateSettings(loadedSettings);
-  }, [updateSettings]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const toStore = JSON.stringify(purgeInvalidEntries(settings));
