@@ -231,13 +231,10 @@ export default function LightboxCanvas() {
         ctx.strokeStyle = "#3b82f6";
         handlePositions.forEach(([hx, hy, pos]) => {
           if (
-            (mode === LightboxEditorMode.SCALE &&
-              ["tl", "tr", "br", "bl"].includes(pos)) ||
-            (mode === LightboxEditorMode.ROTATE && pos === "t") ||
-            (mode === LightboxEditorMode.SKEW &&
-              ["t", "b", "l", "r"].includes(pos)) ||
-            (mode === LightboxEditorMode.CROP &&
-              ["tl", "tr", "br", "bl"].includes(pos))
+            (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
+            (mode === "rotate" && pos === "t") ||
+            (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
+            (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos))
           ) {
             ctx.beginPath();
             ctx.rect(
@@ -311,13 +308,10 @@ export default function LightboxCanvas() {
 
     const activePositions = Object.entries(corners).filter(([pos]) => {
       return (
-        (mode === LightboxEditorMode.SCALE &&
-          ["tl", "tr", "br", "bl"].includes(pos)) ||
-        (mode === LightboxEditorMode.ROTATE && pos === "t") ||
-        (mode === LightboxEditorMode.SKEW &&
-          ["t", "b", "l", "r"].includes(pos)) ||
-        (mode === LightboxEditorMode.CROP &&
-          ["tl", "tr", "br", "bl"].includes(pos))
+        (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
+        (mode === "rotate" && pos === "t") ||
+        (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
+        (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos))
       );
     });
 
@@ -417,7 +411,7 @@ export default function LightboxCanvas() {
         const wy = worldCurrent.y - worldStart.y;
 
         switch (editingHandle.type) {
-          case LightboxEditorMode.SCALE: {
+          case "scale": {
             const scaleFactor = 1 + (wx + wy) / 200; // heuristic scaling speed
             updateImage(editingHandle.imgIndex, {
               scaleX: Math.max(0.1, img.scaleX * scaleFactor),
@@ -425,14 +419,14 @@ export default function LightboxCanvas() {
             });
             break;
           }
-          case LightboxEditorMode.ROTATE: {
+          case "rotate": {
             const angle = (Math.atan2(wy, wx) * 180) / Math.PI;
             updateImage(editingHandle.imgIndex, {
               rotation: img.rotation + angle,
             });
             break;
           }
-          case LightboxEditorMode.SKEW: {
+          case "skew": {
             const skewFactor = wy;
             if (["l", "r"].includes(editingHandle.corner)) {
               updateImage(editingHandle.imgIndex, {
@@ -445,7 +439,7 @@ export default function LightboxCanvas() {
             }
             break;
           }
-          case LightboxEditorMode.CROP: {
+          case "crop": {
             // naive crop: adjust second corner proportionally
             const newCrop = {
               cropSecondX: Math.min(

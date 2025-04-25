@@ -4,9 +4,4 @@ interface SettingsState {
   lightboxEditorMode: LightboxEditorMode;
 }
 
-enum LightboxEditorMode {
-  SCALE = "scale",
-  ROTATE = "rotate",
-  SKEW = "skew",
-  CROP = "crop",
-}
+type LightboxEditorMode = "scale" | "rotate" | "skew" | "crop";
