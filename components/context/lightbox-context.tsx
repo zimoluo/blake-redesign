@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, use, useCallback, useMemo, useState } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { defaultLightbox } from "@/lib/constants";
 import { useSettings } from "./settings-context";
 
@@ -24,7 +31,7 @@ export const LightboxProvider = ({
   children?: React.ReactNode;
 }) => {
   const [lightbox, setLightbox] = useState<LightboxData>(defaultLightbox);
-  const { updateSettings } = useSettings();
+  const { updateSettings, settings } = useSettings();
 
   const updateLightbox = useCallback(
     (patch: Partial<LightboxData>) =>
@@ -72,6 +79,12 @@ export const LightboxProvider = ({
       return prev;
     });
   }, [lightbox, updateSettings]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    // Load the lightbox from settings on mount. This is intended to be a one-time load.
+    setLightbox(settings.savedLightbox);
+  }, []);
 
   const contextValue = useMemo(
     () => ({
