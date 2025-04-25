@@ -1,35 +1,38 @@
 import SidebarToggle from "@/components/ui/lightbox/toolbar/sidebar-toggle";
 import containerStyle from "./container.module.css";
 import SidebarWrapper from "@/components/ui/lightbox/sidebar-wrapper";
+import { LightboxProvider } from "@/components/context/lightbox-context";
 
 export default function LightboxLayout() {
   return (
-    <div className={`${containerStyle.bigBox} px-6 py-3`}>
-      <div
-        className={`grid ${containerStyle.mobileGrid} md:flex h-full w-full p-2 border-reflect ${containerStyle.borderContainer} ${containerStyle.bgContainer} shadow-xl/5 rounded-3xl text-dark`}
-      >
+    <LightboxProvider>
+      <div className={`${containerStyle.bigBox} px-6 py-3`}>
         <div
-          className={`rounded-[1rem_1rem_0.65rem_0.65rem] md:rounded-[1rem_0.65rem_0.65rem_1rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-2 flex-grow border-reflect`}
+          className={`grid ${containerStyle.mobileGrid} md:flex h-full w-full p-2 border-reflect ${containerStyle.borderContainer} ${containerStyle.bgContainer} shadow-xl/5 rounded-3xl text-dark`}
         >
-          awa
-        </div>
-        <SidebarWrapper>
           <div
-            className={`rounded-[0.65rem_0.65rem_0.65rem_1rem] md:rounded-[0.65rem] ${containerStyle.bg} ${containerStyle.borderAdjust} w-full md:w-48 h-full border-reflect`}
+            className={`rounded-[1rem_1rem_0.65rem_0.65rem] md:rounded-[1rem_0.65rem_0.65rem_1rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-2 flex-grow border-reflect`}
           >
-            this will hold the layers
+            awa
           </div>
-        </SidebarWrapper>
-        <div
-          className={`rounded-[0.65rem_0.65rem_1rem_0.65rem] md:rounded-[0.65rem_1rem_1rem_0.65rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full w-12 border-reflect`}
-        >
+          <SidebarWrapper>
+            <div
+              className={`rounded-[0.65rem_0.65rem_0.65rem_1rem] md:rounded-[0.65rem] ${containerStyle.bg} ${containerStyle.borderAdjust} w-full md:w-48 h-full border-reflect`}
+            >
+              this will hold the layers
+            </div>
+          </SidebarWrapper>
           <div
-            className={`w-full h-full flex flex-col items-center ${containerStyle.buttonContainer} overflow-x-hidden overflow-y-auto py-2 gap-2`}
+            className={`rounded-[0.65rem_0.65rem_1rem_0.65rem] md:rounded-[0.65rem_1rem_1rem_0.65rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full w-12 border-reflect`}
           >
-            <SidebarToggle />
+            <div
+              className={`w-full h-full flex flex-col items-center ${containerStyle.buttonContainer} overflow-x-hidden overflow-y-auto py-2 gap-2`}
+            >
+              <SidebarToggle />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </LightboxProvider>
   );
 }
