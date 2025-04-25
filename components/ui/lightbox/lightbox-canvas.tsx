@@ -11,7 +11,6 @@ export default function LightboxCanvas() {
   const { lightbox, images, updateLightbox, updateImage } = useLightbox();
   const { settings } = useSettings();
 
-  // State for drag interactions
   const [isDragging, setIsDragging] = useState(false);
   const [isPanning, setIsPanning] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -31,7 +30,6 @@ export default function LightboxCanvas() {
     cropSecondY?: number;
   }>({});
 
-  // Render the canvas content
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -39,20 +37,16 @@ export default function LightboxCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Resize canvas to match parent dimensions
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Apply camera transform
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.scale(lightbox.cameraZoom, lightbox.cameraZoom);
     ctx.translate(-lightbox.cameraCenterX, -lightbox.cameraCenterY);
 
-    // Draw dot grid if enabled
     if (!lightbox.disableDotGrid) {
       drawDotGrid(ctx, canvas, lightbox);
     }
@@ -334,8 +328,7 @@ export default function LightboxCanvas() {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const drawImage = (ctx: CanvasRenderingContext2D, image: any) => {
+  const drawImage = (ctx: CanvasRenderingContext2D, image: LightboxImage) => {
     if (!image) return;
 
     // Create a placeholder image for demonstration
