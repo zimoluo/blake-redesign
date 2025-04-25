@@ -4,17 +4,11 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useLightbox } from "@/components/context/lightbox-context";
 import { useSettings } from "@/components/context/settings-context";
 
-// -------------------- Types & Constants --------------------
-
-const HANDLE_SIZE = 10; // in px (screen–space)
+const HANDLE_SIZE = 10; // in "pixels"
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 4;
 
-// -------------------- Helpers --------------------
-
 const rad = (deg: number) => (deg * Math.PI) / 180;
-
-// hit‑test helpers -------------------------------------------------------------
 const pointInRect = (
   px: number,
   py: number,
@@ -24,11 +18,8 @@ const pointInRect = (
   rh: number
 ) => px >= rx && px <= rx + rw && py >= ry && py <= ry + rh;
 
-// -------------------- Main Component --------------------
-
 /**
- * A full‑window canvas that renders and manipulates Lightbox images.
- * Uses `settings.lightboxEditorMode` to switch between Scale/Rotate/Skew/Crop tools.
+ * Renders and manages interactions for Lightbox images on a full-window canvas.
  */
 export default function LightboxCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -36,11 +27,9 @@ export default function LightboxCanvas() {
 
   const { lightbox, images, updateImage, setSelectedImage, updateLightbox } =
     useLightbox();
-
   const { settings } = useSettings();
   const mode = settings.lightboxEditorMode as LightboxEditorMode;
 
-  // local interaction state ----------------------------------------------------
   const [isPanning, setIsPanning] = useState(false);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(
     null
@@ -51,49 +40,47 @@ export default function LightboxCanvas() {
     corner: "tl" | "tr" | "br" | "bl" | "t" | "b" | "l" | "r";
   }>(null);
 
-  // Image cache ---------------------------------------------------------------
-  const imgCache = useRef<{ [src: string]: HTMLImageElement }>({});
+  const imgCache = useRef<Record<string, HTMLImageElement>>({});
+
   useEffect(() => {
-    images.forEach((img) => {
-      if (!imgCache.current[img.src]) {
-        const image = new Image();
-        image.src = img.src;
-        imgCache.current[img.src] = image;
+    images.forEach(({ src }) => {
+      if (!imgCache.current[src]) {
+        const img = new Image();
+        img.src = src;
+        imgCache.current[src] = img;
       }
     });
   }, [images]);
 
-  // Resize canvas to parent ----------------------------------------------------
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrapper = wrapperRef.current;
     if (!canvas || !wrapper) return;
 
-    const resizeObserver = new ResizeObserver(() => {
-      const rect = wrapper.getBoundingClientRect();
-      canvas.width = rect.width * window.devicePixelRatio;
-      canvas.height = rect.height * window.devicePixelRatio;
-      canvas.style.width = `${rect.width}px`;
-      canvas.style.height = `${rect.height}px`;
+    const observer = new ResizeObserver(() => {
+      const { width, height } = wrapper.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
       render();
     });
 
-    resizeObserver.observe(wrapper);
-    return () => resizeObserver.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    observer.observe(wrapper);
+    return () => observer.disconnect();
   }, []);
 
-  // World<->Screen transforms --------------------------------------------------
   const worldToScreen = useCallback(
-    (wx: number, wy: number) => {
+    (pos: { x: number; y: number }) => {
       const canvas = canvasRef.current;
       if (!canvas) return { x: 0, y: 0 };
       const { cameraCenterX, cameraCenterY, cameraZoom } = lightbox;
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
       return {
-        x: (wx - cameraCenterX) * cameraZoom + cx,
-        y: (wy - cameraCenterY) * cameraZoom + cy,
+        x: (pos.x - cameraCenterX) * cameraZoom + cx,
+        y: (pos.y - cameraCenterY) * cameraZoom + cy,
       };
     },
     [lightbox]
@@ -114,106 +101,120 @@ export default function LightboxCanvas() {
     [lightbox]
   );
 
-  // -------------------- Rendering --------------------
+  // Draws a dot grid in world‐space units
+  const drawDotGrid = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement
+  ) => {
+    const { cameraCenterX, cameraCenterY, cameraZoom } = lightbox;
+    const dpr = window.devicePixelRatio || 1;
+    const gridSize = 20;
+    const halfW = canvas.width / (2 * cameraZoom);
+    const halfH = canvas.height / (2 * cameraZoom);
+    const startX = Math.floor((cameraCenterX - halfW) / gridSize) * gridSize;
+    const startY = Math.floor((cameraCenterY - halfH) / gridSize) * gridSize;
+
+    ctx.fillStyle = "#ccc";
+    for (let x = startX; x <= cameraCenterX + halfW; x += gridSize) {
+      for (let y = startY; y <= cameraCenterY + halfH; y += gridSize) {
+        const { x: sx, y: sy } = worldToScreen({ x, y });
+        ctx.beginPath();
+        ctx.arc(sx * dpr, sy * dpr, 1 * dpr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  };
 
   const render = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
     const dpr = window.devicePixelRatio || 1;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
+    if (!lightbox.disableDotGrid) drawDotGrid(ctx, canvas);
 
-    // draw dot grid unless disabled -----------------------------------------
-    if (!lightbox.disableDotGrid) {
-      drawDotGrid(ctx, canvas, lightbox);
-    }
-
-    // sort images by order/layer ---------------------------------------------
     const sorted = [...images].sort(
       (a, b) => a.layer - b.layer || a.order - b.order
     );
 
-    sorted.forEach((img, idx) => {
-      const imageEl = imgCache.current[img.src];
-      if (!imageEl || !imageEl.complete) return;
+    sorted.forEach((image, idx) => {
+      const imgEl = imgCache.current[image.src];
+      if (!imgEl?.complete) return;
 
       ctx.save();
+      const {
+        x,
+        y,
+        rotation,
+        skewX,
+        skewY,
+        scaleX,
+        scaleY,
+        opacity,
+        width,
+        height,
+        cropFirstX,
+        cropFirstY,
+        cropSecondX,
+        cropSecondY,
+      } = image;
 
-      // move to image center in screen space ---------------------------------
-      const screenPos = worldToScreen(img.x, img.y);
-      ctx.translate(screenPos.x * dpr, screenPos.y * dpr);
-      ctx.rotate(rad(img.rotation));
-      ctx.transform(
-        1,
-        Math.tan(rad(img.skewY)),
-        Math.tan(rad(img.skewX)),
-        1,
-        0,
-        0
-      );
-      ctx.scale(
-        img.scaleX * lightbox.cameraZoom,
-        img.scaleY * lightbox.cameraZoom
-      );
-      ctx.globalAlpha = img.opacity;
+      const pos = worldToScreen({ x, y });
+      ctx.translate(pos.x * dpr, pos.y * dpr);
+      ctx.rotate(rad(rotation));
+      ctx.transform(1, Math.tan(rad(skewY)), Math.tan(rad(skewX)), 1, 0, 0);
+      ctx.scale(scaleX * lightbox.cameraZoom, scaleY * lightbox.cameraZoom);
+      ctx.globalAlpha = opacity;
 
-      const drawW = img.width;
-      const drawH = img.height;
-
-      // cropping -------------------------------------------------------------
-      const sx = img.cropFirstX * imageEl.naturalWidth;
-      const sy = img.cropFirstY * imageEl.naturalHeight;
-      const sWidth = (img.cropSecondX - img.cropFirstX) * imageEl.naturalWidth;
-      const sHeight =
-        (img.cropSecondY - img.cropFirstY) * imageEl.naturalHeight;
+      const sx = cropFirstX * imgEl.naturalWidth;
+      const sy = cropFirstY * imgEl.naturalHeight;
+      const sw = (cropSecondX - cropFirstX) * imgEl.naturalWidth;
+      const sh = (cropSecondY - cropFirstY) * imgEl.naturalHeight;
 
       ctx.drawImage(
-        imageEl,
+        imgEl,
         sx,
         sy,
-        sWidth,
-        sHeight,
-        (-drawW / 2) * dpr,
-        (-drawH / 2) * dpr,
-        drawW * dpr,
-        drawH * dpr
+        sw,
+        sh,
+        (-width / 2) * dpr,
+        (-height / 2) * dpr,
+        width * dpr,
+        height * dpr
       );
 
-      // selection outline & handles -----------------------------------------
       if (lightbox.hasSelectedImage && lightbox.selectedImageIndex === idx) {
-        ctx.strokeStyle = "#3b82f6"; // blue‑500
+        ctx.strokeStyle = "#3b82f6";
         ctx.lineWidth = 2 / lightbox.cameraZoom;
         ctx.strokeRect(
-          (-drawW / 2) * dpr,
-          (-drawH / 2) * dpr,
-          drawW * dpr,
-          drawH * dpr
+          (-width / 2) * dpr,
+          (-height / 2) * dpr,
+          width * dpr,
+          height * dpr
         );
 
-        // handles -----------------------------------------------------------
-        const handlePositions: [number, number, string][] = [
-          [-drawW / 2, -drawH / 2, "tl"],
-          [drawW / 2, -drawH / 2, "tr"],
-          [drawW / 2, drawH / 2, "br"],
-          [-drawW / 2, drawH / 2, "bl"],
-          [0, -drawH / 2, "t"],
-          [drawW / 2, 0, "r"],
-          [0, drawH / 2, "b"],
-          [-drawW / 2, 0, "l"],
+        const handles = [
+          { pos: "tl", x: -width / 2, y: -height / 2 },
+          { pos: "tr", x: width / 2, y: -height / 2 },
+          { pos: "br", x: width / 2, y: height / 2 },
+          { pos: "bl", x: -width / 2, y: height / 2 },
+          { pos: "t", x: 0, y: -height / 2 },
+          { pos: "r", x: width / 2, y: 0 },
+          { pos: "b", x: 0, y: height / 2 },
+          { pos: "l", x: -width / 2, y: 0 },
         ];
-
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = "#fff";
         ctx.strokeStyle = "#3b82f6";
-        handlePositions.forEach(([hx, hy, pos]) => {
-          if (
+
+        handles.forEach(({ pos, x: hx, y: hy }) => {
+          const visible =
             (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
             (mode === "rotate" && pos === "t") ||
             (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
-            (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos))
-          ) {
+            (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos));
+          if (visible) {
             ctx.beginPath();
             ctx.rect(
               (hx - HANDLE_SIZE / 2) * dpr,
@@ -229,270 +230,186 @@ export default function LightboxCanvas() {
 
       ctx.restore();
     });
+  }, [images, lightbox, mode, worldToScreen]);
 
-    ctx.restore();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images, lightbox, mode]);
-
-  // re‑render when dependencies change ---------------------------------------
   useEffect(() => {
     render();
   }, [render]);
 
-  // -------------------- Pointer Events --------------------
-
   const findHandleAt = (sx: number, sy: number) => {
-    const { hasSelectedImage, selectedImageIndex } = lightbox;
-    if (!hasSelectedImage) return null;
-    const img = images[selectedImageIndex];
-    if (!img) return null;
+    if (!lightbox.hasSelectedImage) return null;
+    const image = images[lightbox.selectedImageIndex];
+    if (!image) return null;
 
-    // work in screen space ---------------------------------------------------
-    const screenPos = worldToScreen(img.x, img.y);
-    const corners = {
-      tl: {
-        x: screenPos.x - (img.width * img.scaleX * lightbox.cameraZoom) / 2,
-        y: screenPos.y - (img.height * img.scaleY * lightbox.cameraZoom) / 2,
-      },
-      tr: {
-        x: screenPos.x + (img.width * img.scaleX * lightbox.cameraZoom) / 2,
-        y: screenPos.y - (img.height * img.scaleY * lightbox.cameraZoom) / 2,
-      },
-      br: {
-        x: screenPos.x + (img.width * img.scaleX * lightbox.cameraZoom) / 2,
-        y: screenPos.y + (img.height * img.scaleY * lightbox.cameraZoom) / 2,
-      },
-      bl: {
-        x: screenPos.x - (img.width * img.scaleX * lightbox.cameraZoom) / 2,
-        y: screenPos.y + (img.height * img.scaleY * lightbox.cameraZoom) / 2,
-      },
-      t: {
-        x: screenPos.x,
-        y: screenPos.y - (img.height * img.scaleY * lightbox.cameraZoom) / 2,
-      },
-      b: {
-        x: screenPos.x,
-        y: screenPos.y + (img.height * img.scaleY * lightbox.cameraZoom) / 2,
-      },
-      l: {
-        x: screenPos.x - (img.width * img.scaleX * lightbox.cameraZoom) / 2,
-        y: screenPos.y,
-      },
-      r: {
-        x: screenPos.x + (img.width * img.scaleX * lightbox.cameraZoom) / 2,
-        y: screenPos.y,
-      },
-    } as const;
+    const center = worldToScreen({ x: image.x, y: image.y });
+    const halfW = (image.width * image.scaleX * lightbox.cameraZoom) / 2;
+    const halfH = (image.height * image.scaleY * lightbox.cameraZoom) / 2;
 
-    const activePositions = Object.entries(corners).filter(([pos]) => {
-      return (
-        (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
-        (mode === "rotate" && pos === "t") ||
-        (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
-        (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos))
-      );
-    });
+    const corners: Record<string, { x: number; y: number }> = {
+      tl: { x: center.x - halfW, y: center.y - halfH },
+      tr: { x: center.x + halfW, y: center.y - halfH },
+      br: { x: center.x + halfW, y: center.y + halfH },
+      bl: { x: center.x - halfW, y: center.y + halfH },
+      t: { x: center.x, y: center.y - halfH },
+      r: { x: center.x + halfW, y: center.y },
+      b: { x: center.x, y: center.y + halfH },
+      l: { x: center.x - halfW, y: center.y },
+    };
 
-    for (const [pos, coord] of activePositions) {
-      if (
-        pointInRect(
-          sx,
-          sy,
-          coord.x - HANDLE_SIZE / 2,
-          coord.y - HANDLE_SIZE / 2,
-          HANDLE_SIZE,
-          HANDLE_SIZE
+    return (
+      Object.entries(corners)
+        .filter(
+          ([pos]) =>
+            (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
+            (mode === "rotate" && pos === "t") ||
+            (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
+            (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos))
         )
-      ) {
-        return pos as typeof pos;
-      }
-    }
-    return null;
+        .find(([, coord]) =>
+          pointInRect(
+            sx,
+            sy,
+            coord.x - HANDLE_SIZE / 2,
+            coord.y - HANDLE_SIZE / 2,
+            HANDLE_SIZE,
+            HANDLE_SIZE
+          )
+        )?.[0] || null
+    );
   };
 
-  const drawDotGrid = (
-    ctx: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement,
-    lightbox: LightboxData
-  ) => {
-    const dpr = window.devicePixelRatio || 1;
-    const gridSize = 20; // grid spacing in *world* units
-
-    // Compute the world-space bounds that are currently visible
-    const halfW = canvas.width / (2 * lightbox.cameraZoom);
-    const halfH = canvas.height / (2 * lightbox.cameraZoom);
-    const minX = lightbox.cameraCenterX - halfW;
-    const maxX = lightbox.cameraCenterX + halfW;
-    const minY = lightbox.cameraCenterY - halfH;
-    const maxY = lightbox.cameraCenterY + halfH;
-
-    // Snap the first dot to the nearest grid intersection
-    const startX = Math.floor(minX / gridSize) * gridSize;
-    const startY = Math.floor(minY / gridSize) * gridSize;
-
-    ctx.fillStyle = "#ccc";
-
-    for (let x = startX; x <= maxX; x += gridSize) {
-      for (let y = startY; y <= maxY; y += gridSize) {
-        const { x: sx, y: sy } = worldToScreen(x, y); // convert to screen space
-        ctx.beginPath();
-        ctx.arc(sx * dpr, sy * dpr, 1 * dpr, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-  };
-
-  const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const sx = e.clientX * dpr;
+    const sy = e.clientY * dpr;
     canvas.setPointerCapture(e.pointerId);
 
-    const sx = e.clientX * (window.devicePixelRatio || 1);
-    const sy = e.clientY * (window.devicePixelRatio || 1);
-
-    // try handles first ------------------------------------------------------
-    const handlePos = findHandleAt(sx, sy);
+    const handlePos = findHandleAt(sx, sy) as
+      | "tl"
+      | "tr"
+      | "br"
+      | "bl"
+      | "t"
+      | "r"
+      | "b"
+      | "l"
+      | null;
     if (handlePos) {
       setEditingHandle({
         imgIndex: lightbox.selectedImageIndex,
         type: mode,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        corner: handlePos as any,
+        corner: handlePos,
       });
       setDragStart({ x: sx, y: sy });
       return;
     }
 
-    // hit‑test images --------------------------------------------------------
-    const hitIndex = [...images].reverse().findIndex((img) => {
-      const screenCenter = worldToScreen(img.x, img.y);
-      const halfW = (img.width * img.scaleX * lightbox.cameraZoom) / 2;
-      const halfH = (img.height * img.scaleY * lightbox.cameraZoom) / 2;
-      return pointInRect(
-        sx,
-        sy,
-        screenCenter.x - halfW,
-        screenCenter.y - halfH,
-        halfW * 2,
-        halfH * 2
-      );
+    const hit = [...images].reverse().findIndex((img) => {
+      const center = worldToScreen({ x: img.x, y: img.y });
+      const w2 = (img.width * img.scaleX * lightbox.cameraZoom) / 2;
+      const h2 = (img.height * img.scaleY * lightbox.cameraZoom) / 2;
+      return pointInRect(sx, sy, center.x - w2, center.y - h2, w2 * 2, h2 * 2);
     });
 
-    if (hitIndex >= 0) {
-      // account for reversed array
-      const idx = images.length - 1 - hitIndex;
+    if (hit >= 0) {
+      const idx = images.length - 1 - hit;
       setSelectedImage(idx);
       updateLightbox({ hasSelectedImage: true });
     } else {
       setSelectedImage(-1);
       updateLightbox({ hasSelectedImage: false });
-      // start panning -------------------------------------------------------
       setIsPanning(true);
       setDragStart({ x: sx, y: sy });
     }
   };
 
-  const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas || (!isPanning && !editingHandle)) return;
+  const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!canvasRef.current || (!isPanning && !editingHandle)) return;
+    const dpr = window.devicePixelRatio || 1;
+    const sx = e.clientX * dpr;
+    const sy = e.clientY * dpr;
+    if (!dragStart) return;
 
-    const sx = e.clientX * (window.devicePixelRatio || 1);
-    const sy = e.clientY * (window.devicePixelRatio || 1);
+    const dx = sx - dragStart.x;
+    const dy = sy - dragStart.y;
 
-    if (dragStart) {
-      const dx = sx - dragStart.x;
-      const dy = sy - dragStart.y;
+    if (isPanning) {
+      updateLightbox({
+        cameraCenterX: lightbox.cameraCenterX - dx / lightbox.cameraZoom,
+        cameraCenterY: lightbox.cameraCenterY - dy / lightbox.cameraZoom,
+      });
+      setDragStart({ x: sx, y: sy });
+    }
 
-      if (isPanning) {
-        updateLightbox({
-          cameraCenterX: lightbox.cameraCenterX - dx / lightbox.cameraZoom,
-          cameraCenterY: lightbox.cameraCenterY - dy / lightbox.cameraZoom,
-        });
-        setDragStart({ x: sx, y: sy });
-      }
+    if (editingHandle) {
+      const image = images[editingHandle.imgIndex];
+      const start = screenToWorld(dragStart.x, dragStart.y);
+      const current = screenToWorld(sx, sy);
+      const wx = current.x - start.x;
+      const wy = current.y - start.y;
 
-      if (editingHandle) {
-        const img = images[editingHandle.imgIndex];
-        if (!img) return;
-        const worldStart = screenToWorld(dragStart.x, dragStart.y);
-        const worldCurrent = screenToWorld(sx, sy);
-
-        const wx = worldCurrent.x - worldStart.x;
-        const wy = worldCurrent.y - worldStart.y;
-
-        switch (editingHandle.type) {
-          case "scale": {
-            const scaleFactor = 1 + (wx + wy) / 200; // heuristic scaling speed
+      switch (editingHandle.type) {
+        case "scale":
+          updateImage(editingHandle.imgIndex, {
+            scaleX: Math.max(0.1, image.scaleX * (1 + (wx + wy) / 200)),
+            scaleY: Math.max(0.1, image.scaleY * (1 + (wx + wy) / 200)),
+          });
+          break;
+        case "rotate":
+          updateImage(editingHandle.imgIndex, {
+            rotation: image.rotation + (Math.atan2(wy, wx) * 180) / Math.PI,
+          });
+          break;
+        case "skew":
+          if (["l", "r"].includes(editingHandle.corner)) {
             updateImage(editingHandle.imgIndex, {
-              scaleX: Math.max(0.1, img.scaleX * scaleFactor),
-              scaleY: Math.max(0.1, img.scaleY * scaleFactor),
+              skewY: image.skewY + wy,
             });
-            break;
-          }
-          case "rotate": {
-            const angle = (Math.atan2(wy, wx) * 180) / Math.PI;
+          } else {
             updateImage(editingHandle.imgIndex, {
-              rotation: img.rotation + angle,
+              skewX: image.skewX + wy,
             });
-            break;
           }
-          case "skew": {
-            const skewFactor = wy;
-            if (["l", "r"].includes(editingHandle.corner)) {
-              updateImage(editingHandle.imgIndex, {
-                skewY: img.skewY + skewFactor,
-              });
-            } else {
-              updateImage(editingHandle.imgIndex, {
-                skewX: img.skewX + skewFactor,
-              });
-            }
-            break;
-          }
-          case "crop": {
-            // naive crop: adjust second corner proportionally
-            const newCrop = {
-              cropSecondX: Math.min(
-                1,
-                Math.max(0, img.cropSecondX + wx / img.width)
-              ),
-              cropSecondY: Math.min(
-                1,
-                Math.max(0, img.cropSecondY + wy / img.height)
-              ),
-            } as Partial<LightboxImage>;
-            updateImage(editingHandle.imgIndex, newCrop);
-            break;
-          }
-        }
-        setDragStart({ x: sx, y: sy });
+          break;
+        case "crop":
+          updateImage(editingHandle.imgIndex, {
+            cropSecondX: Math.min(
+              1,
+              Math.max(0, image.cropSecondX + wx / image.width)
+            ),
+            cropSecondY: Math.min(
+              1,
+              Math.max(0, image.cropSecondY + wy / image.height)
+            ),
+          });
+          break;
       }
+      setDragStart({ x: sx, y: sy });
     }
   };
 
-  const onPointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.releasePointerCapture(e.pointerId);
+    if (canvas) canvas.releasePointerCapture(e.pointerId);
     setIsPanning(false);
     setEditingHandle(null);
     setDragStart(null);
   };
 
-  // zoom with wheel -----------------------------------------------------------
-  const onWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-    const { deltaY } = e;
-    const direction = deltaY > 0 ? -1 : 1;
+    const direction = e.deltaY > 0 ? -1 : 1;
     const factor = 1 + 0.1 * direction;
-    const newZoom = Math.max(
-      MIN_ZOOM,
-      Math.min(MAX_ZOOM, lightbox.cameraZoom * factor)
-    );
-    updateLightbox({ cameraZoom: newZoom });
+    updateLightbox({
+      cameraZoom: Math.max(
+        MIN_ZOOM,
+        Math.min(MAX_ZOOM, lightbox.cameraZoom * factor)
+      ),
+    });
   };
 
-  // -------------------- JSX --------------------
   return (
     <div
       ref={wrapperRef}
@@ -501,10 +418,10 @@ export default function LightboxCanvas() {
       <canvas
         ref={canvasRef}
         className="absolute inset-0"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onWheel={onWheel}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onWheel={handleWheel}
       />
     </div>
   );
