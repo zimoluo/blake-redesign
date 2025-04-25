@@ -22,7 +22,7 @@ interface LightboxData {
   selectedImageIndex: number;
   cameraCenterX: number;
   cameraCenterY: number;
-  cameraScale: number;
+  cameraZoom: number;
 
   disableDotGrid: boolean;
 }
