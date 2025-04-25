@@ -9,11 +9,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import { defaultSettings } from "@/lib/constants";
+import { defaultSettings, localStorageKey } from "@/lib/constants";
 
-const localStorageKey = "blake-website-settings";
-
-const parseStoredSettings = (rawSettingsString: string): SettingsState => {
+export const parseStoredSettings = (
+  rawSettingsString: string
+): SettingsState => {
   if (!rawSettingsString) {
     return defaultSettings;
   }

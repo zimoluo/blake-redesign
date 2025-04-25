@@ -8,8 +8,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { defaultLightbox } from "@/lib/constants";
-import { useSettings } from "./settings-context";
+import {
+  defaultLightbox,
+  defaultSettings,
+  localStorageKey,
+} from "@/lib/constants";
+import { parseStoredSettings, useSettings } from "./settings-context";
 
 const LightboxContext = createContext<
   | {
@@ -31,7 +35,7 @@ export const LightboxProvider = ({
   children?: React.ReactNode;
 }) => {
   const [lightbox, setLightbox] = useState<LightboxData>(defaultLightbox);
-  const { updateSettings, settings } = useSettings();
+  const { updateSettings } = useSettings();
 
   const updateLightbox = useCallback(
     (patch: Partial<LightboxData>) =>
@@ -82,8 +86,11 @@ export const LightboxProvider = ({
 
   useLayoutEffect(() => {
     // Load the lightbox from settings on mount. This is intended to be a one-time load.
-    setLightbox(settings.savedLightbox);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Since, unfortunately, this effect runs before the settings effect, we need to repeat the logic of reading from localStorage
+    const raw = localStorage.getItem(localStorageKey);
+    const loadedSettings = parseStoredSettings(raw || "") || {};
+
+    setLightbox({ ...defaultSettings, ...loadedSettings }.savedLightbox);
   }, []);
 
   const contextValue = useMemo(

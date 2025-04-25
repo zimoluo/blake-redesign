@@ -13,3 +13,5 @@ export const defaultSettings: SettingsState = {
   savedLightbox: defaultLightbox,
   lightboxEditorMode: "scale",
 };
+
+export const localStorageKey = "blake-website-settings";
