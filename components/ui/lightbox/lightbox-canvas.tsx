@@ -128,29 +128,7 @@ export default function LightboxCanvas() {
 
     // draw dot grid unless disabled -----------------------------------------
     if (!lightbox.disableDotGrid) {
-      const gridSpacing = 50 * lightbox.cameraZoom * dpr;
-      ctx.strokeStyle = "#eee";
-      ctx.lineWidth = 1;
-      for (
-        let x = (canvas.width / 2) % gridSpacing;
-        x < canvas.width;
-        x += gridSpacing
-      ) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-      for (
-        let y = (canvas.height / 2) % gridSpacing;
-        y < canvas.height;
-        y += gridSpacing
-      ) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
+      drawDotGrid(ctx, canvas, lightbox);
     }
 
     // sort images by order/layer ---------------------------------------------
@@ -330,6 +308,38 @@ export default function LightboxCanvas() {
       }
     }
     return null;
+  };
+
+  const drawDotGrid = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    lightbox: LightboxData
+  ) => {
+    const gridSize = 20; // Size of grid cells in world space
+
+    // Calculate visible grid area
+    const startX =
+      lightbox.cameraCenterX - canvas.width / 2 / lightbox.cameraZoom;
+    const startY =
+      lightbox.cameraCenterY - canvas.height / 2 / lightbox.cameraZoom;
+    const endX =
+      lightbox.cameraCenterX + canvas.width / 2 / lightbox.cameraZoom;
+    const endY =
+      lightbox.cameraCenterY + canvas.height / 2 / lightbox.cameraZoom;
+
+    // Round to nearest grid cell
+    const gridStartX = Math.floor(startX / gridSize) * gridSize;
+    const gridStartY = Math.floor(startY / gridSize) * gridSize;
+
+    ctx.fillStyle = "#ccc";
+
+    for (let x = gridStartX; x <= endX; x += gridSize) {
+      for (let y = gridStartY; y <= endY; y += gridSize) {
+        ctx.beginPath();
+        ctx.arc(x, y, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
