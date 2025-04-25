@@ -10,6 +10,10 @@ interface LightboxImage {
   rotation: number; // in degrees. the software will handle cycling
   skewX: number; // in degrees. the software will handle range
   skewY: number;
+  cropFirstX: number; // 0-1. proportion of the image size. two points that determines the rectangle (parallel to the image's sides if skewed)
+  cropFirstY: number;
+  cropSecondX: number;
+  cropSecondY: number;
   opacity: number; // 0-1
   order: number; // z-index internal control
   layer: number; // also z-index internal control

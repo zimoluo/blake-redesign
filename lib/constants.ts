@@ -8,7 +8,15 @@ export const defaultLightbox: LightboxData = {
   disableDotGrid: false,
 };
 
+enum LightboxEditorMode {
+  SCALE = "scale",
+  ROTATE = "rotate",
+  SKEW = "skew",
+  CROP = "crop",
+}
+
 export const defaultSettings: SettingsState = {
   lightboxIsSidebarOpen: true,
   savedLightbox: defaultLightbox,
+  lightboxEditorMode: LightboxEditorMode.SCALE,
 };

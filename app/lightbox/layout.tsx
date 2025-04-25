@@ -2,6 +2,7 @@ import SidebarToggle from "@/components/ui/lightbox/toolbar/sidebar-toggle";
 import containerStyle from "./container.module.css";
 import SidebarWrapper from "@/components/ui/lightbox/sidebar-wrapper";
 import { LightboxProvider } from "@/components/context/lightbox-context";
+import LightboxCanvas from "@/components/ui/lightbox/lightbox-canvas";
 
 export default function LightboxLayout() {
   return (
@@ -13,7 +14,7 @@ export default function LightboxLayout() {
           <div
             className={`rounded-[1rem_1rem_0.65rem_0.65rem] md:rounded-[1rem_0.65rem_0.65rem_1rem] ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-2 flex-grow border-reflect`}
           >
-            awa
+            <LightboxCanvas />
           </div>
           <SidebarWrapper>
             <div
