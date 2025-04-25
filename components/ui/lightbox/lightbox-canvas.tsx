@@ -315,28 +315,28 @@ export default function LightboxCanvas() {
     canvas: HTMLCanvasElement,
     lightbox: LightboxData
   ) => {
-    const gridSize = 20; // Size of grid cells in world space
+    const dpr = window.devicePixelRatio || 1;
+    const gridSize = 20; // grid spacing in *world* units
 
-    // Calculate visible grid area
-    const startX =
-      lightbox.cameraCenterX - canvas.width / 2 / lightbox.cameraZoom;
-    const startY =
-      lightbox.cameraCenterY - canvas.height / 2 / lightbox.cameraZoom;
-    const endX =
-      lightbox.cameraCenterX + canvas.width / 2 / lightbox.cameraZoom;
-    const endY =
-      lightbox.cameraCenterY + canvas.height / 2 / lightbox.cameraZoom;
+    // Compute the world-space bounds that are currently visible
+    const halfW = canvas.width / (2 * lightbox.cameraZoom);
+    const halfH = canvas.height / (2 * lightbox.cameraZoom);
+    const minX = lightbox.cameraCenterX - halfW;
+    const maxX = lightbox.cameraCenterX + halfW;
+    const minY = lightbox.cameraCenterY - halfH;
+    const maxY = lightbox.cameraCenterY + halfH;
 
-    // Round to nearest grid cell
-    const gridStartX = Math.floor(startX / gridSize) * gridSize;
-    const gridStartY = Math.floor(startY / gridSize) * gridSize;
+    // Snap the first dot to the nearest grid intersection
+    const startX = Math.floor(minX / gridSize) * gridSize;
+    const startY = Math.floor(minY / gridSize) * gridSize;
 
     ctx.fillStyle = "#ccc";
 
-    for (let x = gridStartX; x <= endX; x += gridSize) {
-      for (let y = gridStartY; y <= endY; y += gridSize) {
+    for (let x = startX; x <= maxX; x += gridSize) {
+      for (let y = startY; y <= maxY; y += gridSize) {
+        const { x: sx, y: sy } = worldToScreen(x, y); // convert to screen space
         ctx.beginPath();
-        ctx.arc(x, y, 1, 0, Math.PI * 2);
+        ctx.arc(sx * dpr, sy * dpr, 1 * dpr, 0, Math.PI * 2);
         ctx.fill();
       }
     }
