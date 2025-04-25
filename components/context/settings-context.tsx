@@ -5,6 +5,7 @@ import {
   use,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from "react";
@@ -75,7 +76,7 @@ export const SettingsProvider = ({
     [settings, updateSettings, toggleSettings]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const raw = localStorage.getItem(localStorageKey);
     const loadedSettings = parseStoredSettings(raw || "") || {};
 

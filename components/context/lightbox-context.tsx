@@ -5,6 +5,7 @@ import {
   use,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from "react";
@@ -80,7 +81,7 @@ export const LightboxProvider = ({
     });
   }, [updateSettings]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Load the lightbox from settings on mount. This is intended to be a one-time load.
     setLightbox(settings.savedLightbox);
     // eslint-disable-next-line react-hooks/exhaustive-deps
