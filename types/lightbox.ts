@@ -30,3 +30,5 @@ interface LightboxData {
 
   disableDotGrid: boolean;
 }
+
+type LightboxEditorMode = "scale" | "rotate" | "skew" | "crop";

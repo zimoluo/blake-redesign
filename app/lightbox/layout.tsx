@@ -1,8 +1,9 @@
-import SidebarToggle from "@/components/ui/lightbox/toolbar/sidebar-toggle";
+import LightboxSidebarToggle from "@/components/ui/lightbox/toolbar/sidebar-toggle";
 import containerStyle from "./container.module.css";
 import SidebarWrapper from "@/components/ui/lightbox/sidebar-wrapper";
 import { LightboxProvider } from "@/components/context/lightbox-context";
 import LightboxCanvas from "@/components/ui/lightbox/lightbox-canvas";
+import LightboxModeSwitch from "@/components/ui/lightbox/toolbar/mode-switch";
 
 export default function LightboxLayout() {
   return (
@@ -27,9 +28,14 @@ export default function LightboxLayout() {
             className={`rounded-2xl ${containerStyle.bg} ${containerStyle.borderAdjust} h-full w-12 border-reflect shadow-xl/5`}
           >
             <div
-              className={`w-full h-full flex flex-col items-center ${containerStyle.buttonContainer} overflow-x-hidden overflow-y-auto py-2 gap-2`}
+              className={`w-full h-full flex flex-col items-center ${containerStyle.buttonContainer} overflow-x-hidden overflow-y-auto py-3.5 gap-3.5`}
             >
-              <SidebarToggle />
+              <LightboxSidebarToggle />
+              <hr className="w-2/5 h-[2px] rounded-full bg-dark opacity-50 border-0" />
+              <LightboxModeSwitch mode="scale" />
+              <LightboxModeSwitch mode="rotate" />
+              <LightboxModeSwitch mode="skew" />
+              <LightboxModeSwitch mode="crop" />
             </div>
           </div>
         </div>

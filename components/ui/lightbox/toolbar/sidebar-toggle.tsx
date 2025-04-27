@@ -3,7 +3,7 @@
 import SidebarIcon from "@/components/asset/sidebar-icon";
 import { useSettings } from "@/components/context/settings-context";
 
-export default function SidebarToggle() {
+export default function LightboxSidebarToggle() {
   const { toggleSettings } = useSettings();
 
   return (

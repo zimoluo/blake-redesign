@@ -43,7 +43,7 @@ export default function LightboxCanvas() {
   );
   const [editingHandle, setEditingHandle] = useState<null | {
     imgIndex: number;
-    type: "scale" | "rotate" | "skew" | "crop";
+    type: LightboxEditorMode;
     corner: "tl" | "tr" | "br" | "bl" | "t" | "b" | "l" | "r";
   }>(null);
 
