@@ -4,6 +4,12 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useLightbox } from "@/components/context/lightbox-context";
 import { useSettings } from "@/components/context/settings-context";
 
+// APR 26 11:48 PM:
+// had some helpers fix this code a bit
+// the handle's hit test is broken as it does NOT account for rotation and possibly others. image hit test is somehow completely fine
+// i suggest you test out other modes. right now i haven't made the glyphs yet but for god's sake use a placeholder and test them ASAP
+// also the selection is a bit off. this is related to the images in general. i should not have made layer and order a thing. they were devised to counter react's lifecycle which is not a thing here.
+
 const HANDLE_SIZE = 10; // in "pixels"
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 4;
@@ -31,6 +37,7 @@ export default function LightboxCanvas() {
   const mode = settings.lightboxEditorMode as LightboxEditorMode;
 
   const [isPanning, setIsPanning] = useState(false);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(
     null
   );
@@ -70,6 +77,30 @@ export default function LightboxCanvas() {
     observer.observe(wrapper);
     return () => observer.disconnect();
   }, []);
+
+  // Fix for passive wheel event
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleWheelEvent = (e: WheelEvent) => {
+      e.preventDefault();
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const factor = 1 + 0.1 * direction;
+      updateLightbox({
+        cameraZoom: Math.max(
+          MIN_ZOOM,
+          Math.min(MAX_ZOOM, lightbox.cameraZoom * factor)
+        ),
+      });
+    };
+
+    canvas.addEventListener("wheel", handleWheelEvent, { passive: false });
+
+    return () => {
+      canvas.removeEventListener("wheel", handleWheelEvent);
+    };
+  }, [lightbox.cameraZoom, updateLightbox]);
 
   const worldToScreen = useCallback(
     (pos: { x: number; y: number }) => {
@@ -238,6 +269,45 @@ export default function LightboxCanvas() {
     render();
   }, [render]);
 
+  // Fixed hit test function
+  const findImageAt = (sx: number, sy: number) => {
+    // Check in reverse order for proper z-ordering (top image first)
+    for (let i = images.length - 1; i >= 0; i--) {
+      const img = images[i];
+      const center = worldToScreen({ x: img.x, y: img.y });
+
+      // Convert image dimensions to screen space
+      const halfW = (img.width * img.scaleX * lightbox.cameraZoom) / 2;
+      const halfH = (img.height * img.scaleY * lightbox.cameraZoom) / 2;
+
+      // Account for rotation by using a simpler but more generous hit box
+      // For more precise hit testing with rotation, we would need to transform the point
+      const dist = Math.sqrt(
+        Math.pow(sx - center.x, 2) + Math.pow(sy - center.y, 2)
+      );
+
+      // Check if point is within the image bounds (assuming square for simplicity)
+      const maxHalf = Math.max(halfW, halfH);
+      if (dist <= maxHalf * 1.5) {
+        // More detailed hit test if needed
+        if (
+          pointInRect(
+            sx,
+            sy,
+            center.x - halfW,
+            center.y - halfH,
+            halfW * 2,
+            halfH * 2
+          )
+        ) {
+          return i;
+        }
+      }
+    }
+
+    return -1;
+  };
+
   const findHandleAt = (sx: number, sy: number) => {
     if (!lightbox.hasSelectedImage) return null;
     const image = images[lightbox.selectedImageIndex];
@@ -258,6 +328,9 @@ export default function LightboxCanvas() {
       l: { x: center.x - halfW, y: center.y },
     };
 
+    // Increase handle hit area slightly for better UX
+    const handleSize = HANDLE_SIZE * 1.5;
+
     return (
       Object.entries(corners)
         .filter(
@@ -271,10 +344,10 @@ export default function LightboxCanvas() {
           pointInRect(
             sx,
             sy,
-            coord.x - HANDLE_SIZE / 2,
-            coord.y - HANDLE_SIZE / 2,
-            HANDLE_SIZE,
-            HANDLE_SIZE
+            coord.x - handleSize / 2,
+            coord.y - handleSize / 2,
+            handleSize,
+            handleSize
           )
         )?.[0] || null
     );
@@ -289,6 +362,7 @@ export default function LightboxCanvas() {
 
     canvas.setPointerCapture(e.pointerId);
 
+    // First check if we're clicking on a handle
     const handlePos = findHandleAt(sx, sy) as
       | "tl"
       | "tr"
@@ -299,6 +373,7 @@ export default function LightboxCanvas() {
       | "b"
       | "l"
       | null;
+
     if (handlePos) {
       setEditingHandle({
         imgIndex: lightbox.selectedImageIndex,
@@ -309,18 +384,18 @@ export default function LightboxCanvas() {
       return;
     }
 
-    const hit = [...images].reverse().findIndex((img) => {
-      const center = worldToScreen({ x: img.x, y: img.y });
-      const w2 = (img.width * img.scaleX * lightbox.cameraZoom) / 2;
-      const h2 = (img.height * img.scaleY * lightbox.cameraZoom) / 2;
-      return pointInRect(sx, sy, center.x - w2, center.y - h2, w2 * 2, h2 * 2);
-    });
+    // Check if we're clicking on an image
+    const hitIndex = findImageAt(sx, sy);
 
-    if (hit >= 0) {
-      const idx = images.length - 1 - hit;
-      setSelectedImage(idx);
-      updateLightbox({ hasSelectedImage: true });
+    if (hitIndex >= 0) {
+      setSelectedImage(hitIndex);
+      updateLightbox({ hasSelectedImage: true, selectedImageIndex: hitIndex });
+
+      // If we hit an image, we might be dragging it
+      setIsDraggingImage(true);
+      setDragStart({ x: sx, y: sy });
     } else {
+      // Otherwise, we're panning the canvas
       setSelectedImage(-1);
       updateLightbox({ hasSelectedImage: false });
       setIsPanning(true);
@@ -330,7 +405,7 @@ export default function LightboxCanvas() {
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas || (!isPanning && !editingHandle)) return;
+    if (!canvas || (!isPanning && !editingHandle && !isDraggingImage)) return;
     const rect = canvas.getBoundingClientRect();
     const sx = e.clientX - rect.left;
     const sy = e.clientY - rect.top;
@@ -346,9 +421,23 @@ export default function LightboxCanvas() {
         cameraCenterY: lightbox.cameraCenterY - dy / lightbox.cameraZoom,
       });
       setDragStart({ x: sx, y: sy });
-    }
+    } else if (isDraggingImage && lightbox.hasSelectedImage) {
+      // Move the image if we're dragging it
+      const worldDelta = {
+        x: dx / lightbox.cameraZoom,
+        y: dy / lightbox.cameraZoom,
+      };
 
-    if (editingHandle) {
+      const imageIndex = lightbox.selectedImageIndex;
+      const image = images[imageIndex];
+
+      updateImage(imageIndex, {
+        x: image.x + worldDelta.x,
+        y: image.y + worldDelta.y,
+      });
+
+      setDragStart({ x: sx, y: sy });
+    } else if (editingHandle) {
       const image = images[editingHandle.imgIndex];
       const start = screenToWorld(dragStart.x, dragStart.y);
       const current = screenToWorld(sx, sy);
@@ -363,32 +452,82 @@ export default function LightboxCanvas() {
           });
           break;
         case "rotate":
+          const centerX = image.x;
+          const centerY = image.y;
+
+          // Get angles from center to start and current points
+          const startAngle = Math.atan2(start.y - centerY, start.x - centerX);
+          const currentAngle = Math.atan2(
+            current.y - centerY,
+            current.x - centerX
+          );
+
+          // Calculate the angle difference in degrees
+          const angleDiff = (currentAngle - startAngle) * (180 / Math.PI);
+
           updateImage(editingHandle.imgIndex, {
-            rotation: image.rotation + (Math.atan2(wy, wx) * 180) / Math.PI,
+            rotation: image.rotation + angleDiff,
           });
           break;
         case "skew":
           if (["l", "r"].includes(editingHandle.corner)) {
             updateImage(editingHandle.imgIndex, {
-              skewY: image.skewY + wy,
+              skewY: image.skewY + wy * 0.5,
             });
           } else {
             updateImage(editingHandle.imgIndex, {
-              skewX: image.skewX + wy,
+              skewX: image.skewX + wy * 0.5,
             });
           }
           break;
         case "crop":
-          updateImage(editingHandle.imgIndex, {
-            cropSecondX: Math.min(
-              1,
-              Math.max(0, image.cropSecondX + wx / image.width)
-            ),
-            cropSecondY: Math.min(
-              1,
-              Math.max(0, image.cropSecondY + wy / image.height)
-            ),
-          });
+          const cropChange = {
+            x: wx / (image.width * image.scaleX),
+            y: wy / (image.height * image.scaleY),
+          };
+
+          // Update crop values based on the corner being dragged
+          const updates: any = {};
+
+          if (editingHandle.corner === "tl") {
+            updates.cropFirstX = Math.min(
+              image.cropSecondX - 0.05,
+              Math.max(0, image.cropFirstX + cropChange.x)
+            );
+            updates.cropFirstY = Math.min(
+              image.cropSecondY - 0.05,
+              Math.max(0, image.cropFirstY + cropChange.y)
+            );
+          } else if (editingHandle.corner === "tr") {
+            updates.cropSecondX = Math.max(
+              image.cropFirstX + 0.05,
+              Math.min(1, image.cropSecondX + cropChange.x)
+            );
+            updates.cropFirstY = Math.min(
+              image.cropSecondY - 0.05,
+              Math.max(0, image.cropFirstY + cropChange.y)
+            );
+          } else if (editingHandle.corner === "bl") {
+            updates.cropFirstX = Math.min(
+              image.cropSecondX - 0.05,
+              Math.max(0, image.cropFirstX + cropChange.x)
+            );
+            updates.cropSecondY = Math.max(
+              image.cropFirstY + 0.05,
+              Math.min(1, image.cropSecondY + cropChange.y)
+            );
+          } else if (editingHandle.corner === "br") {
+            updates.cropSecondX = Math.max(
+              image.cropFirstX + 0.05,
+              Math.min(1, image.cropSecondX + cropChange.x)
+            );
+            updates.cropSecondY = Math.max(
+              image.cropFirstY + 0.05,
+              Math.min(1, image.cropSecondY + cropChange.y)
+            );
+          }
+
+          updateImage(editingHandle.imgIndex, updates);
           break;
       }
       setDragStart({ x: sx, y: sy });
@@ -399,20 +538,14 @@ export default function LightboxCanvas() {
     const canvas = canvasRef.current;
     if (canvas) canvas.releasePointerCapture(e.pointerId);
     setIsPanning(false);
+    setIsDraggingImage(false);
     setEditingHandle(null);
     setDragStart(null);
   };
 
+  // This is no longer used due to passive event handling issue, but kept for React's interface
   const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    const direction = e.deltaY > 0 ? -1 : 1;
-    const factor = 1 + 0.1 * direction;
-    updateLightbox({
-      cameraZoom: Math.max(
-        MIN_ZOOM,
-        Math.min(MAX_ZOOM, lightbox.cameraZoom * factor)
-      ),
-    });
+    // This function is now handled by the useEffect with non-passive wheel event
   };
 
   return (
