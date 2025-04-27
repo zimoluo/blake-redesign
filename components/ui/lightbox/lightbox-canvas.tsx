@@ -487,6 +487,7 @@ export default function LightboxCanvas() {
           };
 
           // Update crop values based on the corner being dragged
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const updates: any = {};
 
           if (editingHandle.corner === "tl") {
@@ -544,6 +545,7 @@ export default function LightboxCanvas() {
   };
 
   // This is no longer used due to passive event handling issue, but kept for React's interface
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     // This function is now handled by the useEffect with non-passive wheel event
   };
