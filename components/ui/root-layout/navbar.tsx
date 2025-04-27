@@ -9,6 +9,7 @@ import NavbarSearchBar from "./navbar-search-bar";
 import InfoIcon from "@/components/asset/info-icon";
 import LightDarkModeToggle from "./light-dark-mode-toggle";
 import NewsBarWrapper from "./news-bar-wrapper";
+import LightboxIcon from "@/components/asset/lightbox-icon";
 
 export default function Navbar() {
   return (
@@ -31,6 +32,9 @@ export default function Navbar() {
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
         <div className="flex items-center gap-4 md:gap-6 mr-4 md:mr-6">
+          <button>
+            <LightboxIcon className="h-6 w-6 hidden md:block hover:scale-110 transition-transform duration-300 ease-out" />
+          </button>
           <LightDarkModeToggle className="hidden md:block" />
           <button>
             <InfoIcon className="h-6 w-6 hidden md:block hover:scale-110 transition-transform duration-300 ease-out" />
