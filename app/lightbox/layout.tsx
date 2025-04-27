@@ -12,7 +12,7 @@ export default function LightboxLayout() {
           className={`grid ${containerStyle.mobileGrid} md:flex h-full w-full p-3 border-reflect ${containerStyle.borderContainer} ${containerStyle.bgContainer} shadow-xl/5 md:rounded-3xl text-dark`}
         >
           <div
-            className={`rounded-2xl ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-3 flex-grow border-reflect overflow-hidden p-px`}
+            className={`rounded-2xl ${containerStyle.bg} ${containerStyle.borderAdjust} h-full md:mr-3 flex-grow border-reflect overflow-hidden p-px shadow-xl/5`}
           >
             <LightboxCanvas />
           </div>
@@ -24,7 +24,7 @@ export default function LightboxLayout() {
             </div>
           </SidebarWrapper>
           <div
-            className={`rounded-2xl ${containerStyle.bg} ${containerStyle.borderAdjust} h-full w-12 border-reflect`}
+            className={`rounded-2xl ${containerStyle.bg} ${containerStyle.borderAdjust} h-full w-12 border-reflect shadow-xl/5`}
           >
             <div
               className={`w-full h-full flex flex-col items-center ${containerStyle.buttonContainer} overflow-x-hidden overflow-y-auto py-2 gap-2`}
