@@ -11,7 +11,7 @@ export default function MoonIcon({
       className={className}
     >
       <path
-        className={`${strokeClassName ? strokeClassName : "stroke-primary"}`}
+        className={`${strokeClassName || "stroke-primary"}`}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}

@@ -15,11 +15,11 @@ export default function InfoIcon({
         cx={12}
         cy={12}
         r={10}
-        className={`${strokeClassName ? strokeClassName : "stroke-primary"}`}
+        className={`${strokeClassName || "stroke-primary"}`}
         strokeWidth={1.5}
       />
       <path
-        className={`${strokeClassName ? strokeClassName : "stroke-primary"}`}
+        className={`${strokeClassName || "stroke-primary"}`}
         strokeLinecap="round"
         strokeWidth={1.5}
         d="M12 17v-6"
@@ -28,7 +28,7 @@ export default function InfoIcon({
         cx={1}
         cy={1}
         r={1}
-        className={`${fillClassName ? fillClassName : "fill-primary"}`}
+        className={`${fillClassName || "fill-primary"}`}
         transform="matrix(1 0 0 -1 11 9)"
       />
     </svg>

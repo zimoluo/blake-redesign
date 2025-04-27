@@ -10,7 +10,7 @@ export default function MenuToggleIcon({
       className={className}
     >
       <path
-        className={`${strokeClassName ? strokeClassName : "stroke-primary"}`}
+        className={`${strokeClassName || "stroke-primary"}`}
         strokeLinecap="round"
         strokeWidth={64}
         fill="none"
