@@ -11,10 +11,7 @@ export default function LightboxModeSwitch({ mode }: Props) {
   const { settings, updateSettings } = useSettings();
 
   return (
-    <button
-      onClick={() => updateSettings({ lightboxEditorMode: mode })}
-      className="hidden md:block"
-    >
+    <button onClick={() => updateSettings({ lightboxEditorMode: mode })}>
       <MoonIcon
         className="w-full h-full transition-transform duration-300 ease-out hover:scale-110"
         strokeClassName={

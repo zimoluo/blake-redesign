@@ -31,7 +31,7 @@ export default function LightboxLayout() {
               className={`w-full h-full flex flex-col items-center ${containerStyle.buttonContainer} overflow-x-hidden overflow-y-auto py-3.5 gap-3.5`}
             >
               <LightboxSidebarToggle />
-              <hr className="w-2/5 h-[2px] rounded-full bg-dark opacity-50 border-0" />
+              <hr className="w-2/5 h-[2px] rounded-full bg-dark opacity-50 border-0 hidden md:block" />
               <LightboxModeSwitch mode="scale" />
               <LightboxModeSwitch mode="rotate" />
               <LightboxModeSwitch mode="skew" />
