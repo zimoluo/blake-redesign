@@ -32,9 +32,9 @@ export default function Navbar() {
         </Link>
         <div className="flex-grow invisible pointer-events-none select-none h-0" />
         <div className="flex items-center gap-4 md:gap-6 mr-4 md:mr-6">
-          <button>
+          <Link href="/lightbox">
             <LightboxIcon className="h-6 w-6 hidden md:block hover:scale-110 transition-transform duration-300 ease-out" />
-          </button>
+          </Link>
           <LightDarkModeToggle className="hidden md:block" />
           <button>
             <InfoIcon className="h-6 w-6 hidden md:block hover:scale-110 transition-transform duration-300 ease-out" />
@@ -47,14 +47,21 @@ export default function Navbar() {
       <NavbarSecondaryMenuWrapper>
         <div className="h-full w-full bg-pastel/85 backdrop-blur-2xl text-dark">
           <div className="md:hidden flex items-center justify-center pt-7 pb-5 gap-6">
+            <Link href="/lightbox">
+              <LightboxIcon
+                className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out"
+                strokeClassName="stroke-dark"
+                fillClassName="fill-dark"
+              />
+            </Link>
             <LightDarkModeToggle strokeClassName="stroke-dark" />
-            <NavbarSearchBar alwaysExpanded={true} />
             <button>
               <InfoIcon
                 className="h-6 w-6 hover:scale-110 transition-transform duration-300 ease-out"
                 strokeClassName="stroke-dark"
               />
             </button>
+            <NavbarSearchBar alwaysExpanded={true} />
           </div>
           <NavbarSubmenuCategorySelector />
           <div className="w-full px-8 py-2">
