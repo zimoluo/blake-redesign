@@ -4,16 +4,60 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useLightbox } from "@/components/context/lightbox-context";
 import { useSettings } from "@/components/context/settings-context";
 
-// APR 26 11:48 PM:
-// had some helpers fix this code a bit
-// the handle's hit test is broken as it does NOT account for rotation, skew and possibly others. image hit test is somehow completely fine
-// the crop is not how i think it works. it should actually shrink the image itself based on how much it's cropped (and accordingly, the handles. essentially cropping will be baked into the rendering/hittesting pipeline). the current implementation keeps the image's hitbox's dimension and simply kind of 'enlarge' the content inside that image.
-
 const HANDLE_SIZE = 10; // in "pixels"
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 4;
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
+
+// Transform a point through a transform matrix
+const transformPoint = (
+  x: number,
+  y: number,
+  centerX: number,
+  centerY: number,
+  rotation: number,
+  skewX: number,
+  skewY: number,
+  scaleX: number,
+  scaleY: number
+) => {
+  // Translate to origin
+  let nx = x - centerX;
+  let ny = y - centerY;
+
+  // Apply inverse transformations in reverse order
+
+  // Inverse scale
+  nx /= scaleX;
+  ny /= scaleY;
+
+  // Inverse skew (more complex)
+  const skewXRad = rad(skewX);
+  const skewYRad = rad(skewY);
+  const det = 1 - Math.tan(skewXRad) * Math.tan(skewYRad);
+  const tempX = nx - ny * Math.tan(skewYRad);
+  const tempY = ny - nx * Math.tan(skewXRad);
+  nx = tempX / det;
+  ny = tempY / det;
+
+  // Inverse rotation
+  const rotRad = rad(rotation);
+  const cosR = Math.cos(rotRad);
+  const sinR = Math.sin(rotRad);
+  const tempRX = nx * cosR + ny * sinR;
+  const tempRY = ny * cosR - nx * sinR;
+  nx = tempRX;
+  ny = tempRY;
+
+  // Translate back
+  nx += centerX;
+  ny += centerY;
+
+  return { x: nx, y: ny };
+};
+
+// Check if point is in rectangle
 const pointInRect = (
   px: number,
   py: number,
@@ -189,6 +233,14 @@ export default function LightboxCanvas() {
         cropSecondY,
       } = image;
 
+      // Calculate cropped dimensions
+      const cropWidth = cropSecondX - cropFirstX;
+      const cropHeight = cropSecondY - cropFirstY;
+
+      // Apply crop to the image dimensions
+      const croppedWidth = width * cropWidth;
+      const croppedHeight = height * cropHeight;
+
       const pos = worldToScreen({ x, y });
       ctx.translate(pos.x * dpr, pos.y * dpr);
       ctx.rotate(rad(rotation));
@@ -198,40 +250,44 @@ export default function LightboxCanvas() {
 
       const sx = cropFirstX * imgEl.naturalWidth;
       const sy = cropFirstY * imgEl.naturalHeight;
-      const sw = (cropSecondX - cropFirstX) * imgEl.naturalWidth;
-      const sh = (cropSecondY - cropFirstY) * imgEl.naturalHeight;
+      const sw = cropWidth * imgEl.naturalWidth;
+      const sh = cropHeight * imgEl.naturalHeight;
 
+      // Draw the image using the cropped dimensions
       ctx.drawImage(
         imgEl,
         sx,
         sy,
         sw,
         sh,
-        (-width / 2) * dpr,
-        (-height / 2) * dpr,
-        width * dpr,
-        height * dpr
+        (-croppedWidth / 2) * dpr,
+        (-croppedHeight / 2) * dpr,
+        croppedWidth * dpr,
+        croppedHeight * dpr
       );
 
       if (lightbox.hasSelectedImage && lightbox.selectedImageIndex === idx) {
         ctx.strokeStyle = "#3b82f6";
         ctx.lineWidth = 2 / lightbox.cameraZoom;
+
+        // Draw selection border using the cropped dimensions
         ctx.strokeRect(
-          (-width / 2) * dpr,
-          (-height / 2) * dpr,
-          width * dpr,
-          height * dpr
+          (-croppedWidth / 2) * dpr,
+          (-croppedHeight / 2) * dpr,
+          croppedWidth * dpr,
+          croppedHeight * dpr
         );
 
+        // Update handle positions based on cropped dimensions
         const handles = [
-          { pos: "tl", x: -width / 2, y: -height / 2 },
-          { pos: "tr", x: width / 2, y: -height / 2 },
-          { pos: "br", x: width / 2, y: height / 2 },
-          { pos: "bl", x: -width / 2, y: height / 2 },
-          { pos: "t", x: 0, y: -height / 2 },
-          { pos: "r", x: width / 2, y: 0 },
-          { pos: "b", x: 0, y: height / 2 },
-          { pos: "l", x: -width / 2, y: 0 },
+          { pos: "tl", x: -croppedWidth / 2, y: -croppedHeight / 2 },
+          { pos: "tr", x: croppedWidth / 2, y: -croppedHeight / 2 },
+          { pos: "br", x: croppedWidth / 2, y: croppedHeight / 2 },
+          { pos: "bl", x: -croppedWidth / 2, y: croppedHeight / 2 },
+          { pos: "t", x: 0, y: -croppedHeight / 2 },
+          { pos: "r", x: croppedWidth / 2, y: 0 },
+          { pos: "b", x: 0, y: croppedHeight / 2 },
+          { pos: "l", x: -croppedWidth / 2, y: 0 },
         ];
         ctx.fillStyle = "#fff";
         ctx.strokeStyle = "#3b82f6";
@@ -264,70 +320,123 @@ export default function LightboxCanvas() {
     render();
   }, [render]);
 
-  // Fixed hit test function
+  // Improved hit test function that accounts for transformations
   const findImageAt = (sx: number, sy: number) => {
     // Check in reverse order for proper z-ordering (top image first)
     for (let i = images.length - 1; i >= 0; i--) {
       const img = images[i];
       const center = worldToScreen({ x: img.x, y: img.y });
 
-      // Convert image dimensions to screen space
-      const halfW = (img.width * img.scaleX * lightbox.cameraZoom) / 2;
-      const halfH = (img.height * img.scaleY * lightbox.cameraZoom) / 2;
+      // Calculate cropped dimensions
+      const cropWidth = img.cropSecondX - img.cropFirstX;
+      const cropHeight = img.cropSecondY - img.cropFirstY;
+      const croppedWidth = img.width * cropWidth;
+      const croppedHeight = img.height * cropHeight;
 
-      // Account for rotation by using a simpler but more generous hit box
-      // For more precise hit testing with rotation, we would need to transform the point
-      const dist = Math.sqrt(
-        Math.pow(sx - center.x, 2) + Math.pow(sy - center.y, 2)
+      // Convert image dimensions to screen space
+      const halfW = (croppedWidth * img.scaleX * lightbox.cameraZoom) / 2;
+      const halfH = (croppedHeight * img.scaleY * lightbox.cameraZoom) / 2;
+
+      // Convert screen point to world coordinates
+      const worldPoint = screenToWorld(sx, sy);
+
+      // Transform point to account for image transformations
+      const transformedPoint = transformPoint(
+        worldPoint.x,
+        worldPoint.y,
+        img.x,
+        img.y,
+        img.rotation,
+        img.skewX,
+        img.skewY,
+        img.scaleX,
+        img.scaleY
       );
 
-      // Check if point is within the image bounds (assuming square for simplicity)
-      const maxHalf = Math.max(halfW, halfH);
-      if (dist <= maxHalf * 1.5) {
-        // More detailed hit test if needed
-        if (
-          pointInRect(
-            sx,
-            sy,
-            center.x - halfW,
-            center.y - halfH,
-            halfW * 2,
-            halfH * 2
-          )
-        ) {
-          return i;
-        }
+      // Check if transformed point is within image bounds
+      if (
+        Math.abs(transformedPoint.x - img.x) <= croppedWidth / 2 &&
+        Math.abs(transformedPoint.y - img.y) <= croppedHeight / 2
+      ) {
+        return i;
       }
     }
 
     return -1;
   };
 
+  // Improved handle hit test
   const findHandleAt = (sx: number, sy: number) => {
     if (!lightbox.hasSelectedImage) return null;
-    const image = images[lightbox.selectedImageIndex];
+    const imgIndex = lightbox.selectedImageIndex;
+    const image = images[imgIndex];
     if (!image) return null;
 
-    const center = worldToScreen({ x: image.x, y: image.y });
-    const halfW = (image.width * image.scaleX * lightbox.cameraZoom) / 2;
-    const halfH = (image.height * image.scaleY * lightbox.cameraZoom) / 2;
+    // Calculate cropped dimensions
+    const cropWidth = image.cropSecondX - image.cropFirstX;
+    const cropHeight = image.cropSecondY - image.cropFirstY;
+    const croppedWidth = image.width * cropWidth;
+    const croppedHeight = image.height * cropHeight;
 
-    const corners: Record<string, { x: number; y: number }> = {
-      tl: { x: center.x - halfW, y: center.y - halfH },
-      tr: { x: center.x + halfW, y: center.y - halfH },
-      br: { x: center.x + halfW, y: center.y + halfH },
-      bl: { x: center.x - halfW, y: center.y + halfH },
-      t: { x: center.x, y: center.y - halfH },
-      r: { x: center.x + halfW, y: center.y },
-      b: { x: center.x, y: center.y + halfH },
-      l: { x: center.x - halfW, y: center.y },
+    // Get screen position of image center
+    const center = worldToScreen({ x: image.x, y: image.y });
+
+    // Handle positions in world space (centered around image)
+    const handlePositions = {
+      tl: { x: -croppedWidth / 2, y: -croppedHeight / 2 },
+      tr: { x: croppedWidth / 2, y: -croppedHeight / 2 },
+      br: { x: croppedWidth / 2, y: croppedHeight / 2 },
+      bl: { x: -croppedWidth / 2, y: croppedHeight / 2 },
+      t: { x: 0, y: -croppedHeight / 2 },
+      r: { x: croppedWidth / 2, y: 0 },
+      b: { x: 0, y: croppedHeight / 2 },
+      l: { x: -croppedWidth / 2, y: 0 },
     };
 
-    // Increase handle hit area slightly for better UX
+    // Convert world point to screen space
+    const worldToHandleScreen = (handle: { x: number; y: number }) => {
+      // Create a temporary canvas context to apply transformations
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return { x: 0, y: 0 };
+
+      // Apply transformations in the same order as in the render function
+      ctx.translate(center.x, center.y);
+      ctx.rotate(rad(image.rotation));
+      ctx.transform(
+        1,
+        Math.tan(rad(image.skewY)),
+        Math.tan(rad(image.skewX)),
+        1,
+        0,
+        0
+      );
+      ctx.scale(
+        image.scaleX * lightbox.cameraZoom,
+        image.scaleY * lightbox.cameraZoom
+      );
+
+      // Get the transformation matrix
+      const matrix = ctx.getTransform();
+
+      // Apply the matrix to the handle position
+      const screenX = matrix.a * handle.x + matrix.c * handle.y + matrix.e;
+      const screenY = matrix.b * handle.x + matrix.d * handle.y + matrix.f;
+
+      return { x: screenX, y: screenY };
+    };
+
+    // Convert all handle positions to screen space
+    const screenHandles: Record<string, { x: number; y: number }> = {} as any;
+    Object.entries(handlePositions).forEach(([key, pos]) => {
+      screenHandles[key] = worldToHandleScreen(pos);
+    });
+
+    // Check if point is within any handle's hit area
     const handleSize = HANDLE_SIZE * 1.5;
 
     return (
-      Object.entries(corners)
+      Object.entries(screenHandles)
         .filter(
           ([pos]) =>
             (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
@@ -439,6 +548,12 @@ export default function LightboxCanvas() {
       const wx = current.x - start.x;
       const wy = current.y - start.y;
 
+      // Calculate cropped dimensions
+      const cropWidth = image.cropSecondX - image.cropFirstX;
+      const cropHeight = image.cropSecondY - image.cropFirstY;
+      const croppedWidth = image.width * cropWidth;
+      const croppedHeight = image.height * cropHeight;
+
       switch (editingHandle.type) {
         case "scale":
           updateImage(editingHandle.imgIndex, {
@@ -477,8 +592,8 @@ export default function LightboxCanvas() {
           break;
         case "crop":
           const cropChange = {
-            x: wx / (image.width * image.scaleX),
-            y: wy / (image.height * image.scaleY),
+            x: wx / (croppedWidth * image.scaleX),
+            y: wy / (croppedHeight * image.scaleY),
           };
 
           // Update crop values based on the corner being dragged
