@@ -6,9 +6,8 @@ import { useSettings } from "@/components/context/settings-context";
 
 // APR 26 11:48 PM:
 // had some helpers fix this code a bit
-// the handle's hit test is broken as it does NOT account for rotation and possibly others. image hit test is somehow completely fine
-// i suggest you test out other modes. right now i haven't made the glyphs yet but for god's sake use a placeholder and test them ASAP
-// also the selection is a bit off. this is related to the images in general. i should not have made layer and order a thing. they were devised to counter react's lifecycle which is not a thing here.
+// the handle's hit test is broken as it does NOT account for rotation, skew and possibly others. image hit test is somehow completely fine
+// the crop is not how i think it works. it should actually shrink the image itself based on how much it's cropped (and accordingly, the handles. essentially cropping will be baked into the rendering/hittesting pipeline). the current implementation keeps the image's hitbox's dimension and simply kind of 'enlarge' the content inside that image.
 
 const HANDLE_SIZE = 10; // in "pixels"
 const MIN_ZOOM = 0.1;
