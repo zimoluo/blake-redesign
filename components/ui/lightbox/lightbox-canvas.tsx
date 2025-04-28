@@ -328,17 +328,12 @@ export default function LightboxCanvas() {
     // Check in reverse order for proper z-ordering (top image first)
     for (let i = images.length - 1; i >= 0; i--) {
       const img = images[i];
-      const center = worldToScreen({ x: img.x, y: img.y });
 
       // Calculate cropped dimensions
       const cropWidth = img.cropSecondX - img.cropFirstX;
       const cropHeight = img.cropSecondY - img.cropFirstY;
       const croppedWidth = img.width * cropWidth;
       const croppedHeight = img.height * cropHeight;
-
-      // Convert image dimensions to screen space
-      const halfW = (croppedWidth * img.scaleX * lightbox.cameraZoom) / 2;
-      const halfH = (croppedHeight * img.scaleY * lightbox.cameraZoom) / 2;
 
       // Convert screen point to world coordinates
       const worldPoint = screenToWorld(sx, sy);
@@ -430,6 +425,7 @@ export default function LightboxCanvas() {
     };
 
     // Convert all handle positions to screen space
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const screenHandles: Record<string, { x: number; y: number }> = {} as any;
     Object.entries(handlePositions).forEach(([key, pos]) => {
       screenHandles[key] = worldToHandleScreen(pos);
