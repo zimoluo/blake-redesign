@@ -15,8 +15,6 @@ interface LightboxImage {
   cropSecondX: number;
   cropSecondY: number;
   opacity: number; // 0-1
-  order: number; // z-index internal control
-  layer: number; // also z-index internal control
   // more properties can be added as needed
 }
 

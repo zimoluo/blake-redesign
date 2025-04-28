@@ -168,11 +168,7 @@ export default function LightboxCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (!lightbox.disableDotGrid) drawDotGrid(ctx, canvas);
 
-    const sorted = [...images].sort(
-      (a, b) => a.layer - b.layer || a.order - b.order
-    );
-
-    sorted.forEach((image, idx) => {
+    images.forEach((image, idx) => {
       const imgEl = imgCache.current[image.src];
       if (!imgEl?.complete) return;
 
