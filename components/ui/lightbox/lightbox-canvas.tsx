@@ -4,6 +4,9 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useLightbox } from "@/components/context/lightbox-context";
 import { useSettings } from "@/components/context/settings-context";
 
+// Apr 27 11:25 PM: a few things to fix: the motion translation (translating the delta x or y to the change amount of whatever property) is very janky at the moment. only rotation handle works properly and the other ones have either weird logic or such. this is a general description but you can try to fix that.
+// the scale handle needs a rework. it will have eight, not four, handles. the additional four are on the middle of each sides. it will resize it with respect to the handle on the opposite end rather than from the center, unless option or alt is pressed, like how a real editor works. it will also be able to break the aspect ratio unless shift is pressed, like how a real editor works.
+
 const HANDLE_SIZE = 10; // in "pixels"
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 4;
