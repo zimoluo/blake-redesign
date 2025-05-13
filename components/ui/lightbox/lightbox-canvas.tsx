@@ -8,8 +8,8 @@ import { useSettings } from "@/components/context/settings-context";
 // the scale handle needs a rework. it will have eight, not four, handles. the additional four are on the middle of each sides. it will resize it with respect to the handle on the opposite end rather than from the center, unless option or alt is pressed, like how a real editor works. it will also be able to break the aspect ratio unless shift is pressed, like how a real editor works.
 
 const HANDLE_SIZE = 10; // in "pixels"
-const MIN_ZOOM = 0.1;
-const MAX_ZOOM = 4;
+const MIN_ZOOM = 0.67;
+const MAX_ZOOM = 1.5;
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
 
@@ -132,7 +132,8 @@ export default function LightboxCanvas() {
     const handleWheelEvent = (e: WheelEvent) => {
       e.preventDefault();
       const direction = e.deltaY > 0 ? -1 : 1;
-      const factor = 1 + 0.1 * direction;
+      const sensitivity = 0.06;
+      const factor = 1 + sensitivity * direction;
       updateLightbox({
         cameraZoom: Math.max(
           MIN_ZOOM,
@@ -297,7 +298,8 @@ export default function LightboxCanvas() {
 
         handles.forEach(({ pos, x: hx, y: hy }) => {
           const visible =
-            (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
+            (mode === "scale" &&
+              ["tl", "tr", "br", "bl", "t", "r", "b", "l"].includes(pos)) ||
             (mode === "rotate" && pos === "t") ||
             (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
             (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos));
@@ -438,7 +440,8 @@ export default function LightboxCanvas() {
       Object.entries(screenHandles)
         .filter(
           ([pos]) =>
-            (mode === "scale" && ["tl", "tr", "br", "bl"].includes(pos)) ||
+            (mode === "scale" &&
+              ["tl", "tr", "br", "bl", "t", "r", "b", "l"].includes(pos)) ||
             (mode === "rotate" && pos === "t") ||
             (mode === "skew" && ["t", "b", "l", "r"].includes(pos)) ||
             (mode === "crop" && ["tl", "tr", "br", "bl"].includes(pos))
@@ -541,25 +544,107 @@ export default function LightboxCanvas() {
 
       setDragStart({ x: sx, y: sy });
     } else if (editingHandle) {
+      const isShiftPressed = e.shiftKey;
+      const isAltPressed = e.altKey;
+
       const image = images[editingHandle.imgIndex];
       const start = screenToWorld(dragStart.x, dragStart.y);
       const current = screenToWorld(sx, sy);
-      const wx = current.x - start.x;
-      const wy = current.y - start.y;
+      const wx = (current.x - start.x) * (isAltPressed ? 1 : 0.5);
+      const wy = (current.y - start.y) * (isAltPressed ? 1 : 0.5);
 
-      // Calculate cropped dimensions
       const cropWidth = image.cropSecondX - image.cropFirstX;
       const cropHeight = image.cropSecondY - image.cropFirstY;
       const croppedWidth = image.width * cropWidth;
       const croppedHeight = image.height * cropHeight;
 
       switch (editingHandle.type) {
-        case "scale":
+        case "scale": {
+          const corner = editingHandle.corner;
+
+          // Calculate the scaling factors based on the handle position
+          let scaleFactorX = 1;
+          let scaleFactorY = 1;
+
+          // Get original width and height to calculate the scale factors
+          const origWidth = croppedWidth * image.scaleX;
+          const origHeight = croppedHeight * image.scaleY;
+
+          // Calculate scale factors based on which handle is being dragged
+          if (["tl", "bl", "l"].includes(corner)) {
+            // Left edge handles - invert the x movement
+            scaleFactorX = 1 - (wx * 2) / origWidth;
+          } else if (["tr", "br", "r"].includes(corner)) {
+            // Right edge handles
+            scaleFactorX = 1 + (wx * 2) / origWidth;
+          }
+
+          if (["tl", "tr", "t"].includes(corner)) {
+            // Top edge handles - invert the y movement
+            scaleFactorY = 1 - (wy * 2) / origHeight;
+          } else if (["bl", "br", "b"].includes(corner)) {
+            // Bottom edge handles
+            scaleFactorY = 1 + (wy * 2) / origHeight;
+          }
+
+          // Ensure minimum scale
+          scaleFactorX = Math.max(0.1, scaleFactorX);
+          scaleFactorY = Math.max(0.1, scaleFactorY);
+
+          // Apply aspect ratio constraint if shift is pressed
+          if (isShiftPressed) {
+            // For corner handles, use the larger scale factor
+            if (["tl", "tr", "bl", "br"].includes(corner)) {
+              const maxFactor = Math.max(
+                Math.abs(scaleFactorX - 1),
+                Math.abs(scaleFactorY - 1)
+              );
+              scaleFactorX = 1 + Math.sign(scaleFactorX - 1) * maxFactor;
+              scaleFactorY = 1 + Math.sign(scaleFactorY - 1) * maxFactor;
+            }
+            // For edge handles, don't change the perpendicular axis
+            else if (["t", "b"].includes(corner)) {
+              scaleFactorX = 1;
+            } else if (["l", "r"].includes(corner)) {
+              scaleFactorY = 1;
+            }
+          }
+
+          // Calculate new scale values
+          let newScaleX = image.scaleX * scaleFactorX;
+          let newScaleY = image.scaleY * scaleFactorY;
+
+          // Calculate position adjustment to anchor at the opposite corner
+          let posX = image.x;
+          let posY = image.y;
+
+          if (!isAltPressed) {
+            // Determine anchor point and translation needed
+            const anchorOffsetX = (origWidth / 2) * (scaleFactorX - 1);
+            const anchorOffsetY = (origHeight / 2) * (scaleFactorY - 1);
+
+            // Apply translation based on which corner is being manipulated
+            if (["tl", "bl", "l"].includes(corner)) {
+              posX -= anchorOffsetX;
+            } else if (["tr", "br", "r"].includes(corner)) {
+              posX += anchorOffsetX;
+            }
+
+            if (["tl", "tr", "t"].includes(corner)) {
+              posY -= anchorOffsetY;
+            } else if (["bl", "br", "b"].includes(corner)) {
+              posY += anchorOffsetY;
+            }
+          }
+
           updateImage(editingHandle.imgIndex, {
-            scaleX: Math.max(0.1, image.scaleX * (1 + (wx + wy) / 200)),
-            scaleY: Math.max(0.1, image.scaleY * (1 + (wx + wy) / 200)),
+            scaleX: newScaleX,
+            scaleY: newScaleY,
+            x: posX,
+            y: posY,
           });
           break;
+        }
         case "rotate":
           const centerX = image.x;
           const centerY = image.y;
@@ -653,12 +738,6 @@ export default function LightboxCanvas() {
     setDragStart(null);
   };
 
-  // This is no longer used due to passive event handling issue, but kept for React's interface
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
-    // This function is now handled by the useEffect with non-passive wheel event
-  };
-
   return (
     <div
       ref={wrapperRef}
@@ -670,7 +749,6 @@ export default function LightboxCanvas() {
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        onWheel={handleWheel}
       />
     </div>
   );
